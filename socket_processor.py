@@ -15,10 +15,6 @@ class Socket_processor(QThread): #注意继承QThread
         self.command_list=[] #需要执行的命令表
         self.result_list=[] #命令返回结果集
 
-    #command_list的Set方法
-    def set_command_list(self,command):
-        self.command_list.append(command)
-
     #封装的传递显示信息的方法
     def tb(self,msg,addr=''):
         addr='--'+addr
