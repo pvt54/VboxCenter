@@ -44,7 +44,7 @@ class Ui_Vcenter_form(object):
         self.label = QtGui.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(50, 0, 101, 31))
         font = QtGui.QFont()
-        font.setFamily(_fromUtf8("Aharoni"))
+        font.setFamily(_fromUtf8("Calibri"))
         font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
