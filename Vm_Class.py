@@ -8,7 +8,7 @@ class VirtualMachineInfo():
     #虚拟机描述信息(str)
     Description=None
 
-    #虚拟机电源状态(str)
+    #虚拟机电源状态int(搭配常数字典MachineState)
     PowerState=None
 
     #虚拟机操作系统版本(str)

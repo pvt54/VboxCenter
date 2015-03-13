@@ -34,13 +34,26 @@ class Ui_Vcenter_form(object):
         Vcenter_form.setSizePolicy(sizePolicy)
         self.centralwidget = QtGui.QWidget(Vcenter_form)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-        self.treeView = QtGui.QTreeView(self.centralwidget)
-        self.treeView.setGeometry(QtCore.QRect(0, 30, 211, 591))
+
+        self.scrollArea = QtGui.QScrollArea(self.centralwidget)
+        self.scrollArea.setGeometry(QtCore.QRect(0, 30, 211, 591))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
+        self.scrollAreaWidgetContents = QtGui.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 30, 211, 591))
+        self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
+
+        self.treeWidget = QtGui.QTreeWidget(self.centralwidget)
+        self.treeWidget.setGeometry(QtCore.QRect(0, 30, 211, 591))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Calibri"))
         font.setPointSize(10)
-        self.treeView.setFont(font)
-        self.treeView.setObjectName(_fromUtf8("treeView"))
+        self.treeWidget.setFont(font)
+        self.treeWidget.setObjectName(_fromUtf8("treeWidget"))
+        self.treeWidget.setColumnCount(2)
+        self.treeWidget.setHeaderLabels([u'名称',u'状态'])
+        self.treeWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)#设定treeWidget的右键菜单类型
+
         self.label = QtGui.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(50, 0, 101, 31))
         font = QtGui.QFont()
@@ -379,6 +392,11 @@ class Ui_Vcenter_form(object):
 
         self.retranslateUi(Vcenter_form)
         QtCore.QMetaObject.connectSlotsByName(Vcenter_form)
+        #添加treeWidget的点击事件信号
+        QtCore.QObject.connect(self.treeWidget, QtCore.SIGNAL(_fromUtf8("clicked(QModelIndex)")), Vcenter_form.tree_selected)
+        #添加treeWidget的右键菜单
+        self.treeWidget.customContextMenuRequested[QtCore.QPoint].connect(Vcenter_form.treeWidget_contextmenu)
+        QtCore.QObject.connect(self.action, QtCore.SIGNAL(_fromUtf8("triggered()")), Vcenter_form.connecthost)
 
     def retranslateUi(self, Vcenter_form):
         Vcenter_form.setWindowTitle(_translate("Vcenter_form", "VirtualBox虚拟机管理中心", None))

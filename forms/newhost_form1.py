@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'newhost.ui'
+# Form implementation generated from reading ui file 'newhost_form.ui'
 #
-# Created: Sat Mar 07 17:47:23 2015
+# Created: Fri Mar 13 19:11:22 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -55,9 +55,10 @@ class Ui_newhost(object):
         font.setPointSize(11)
         self.le_hostPWD.setFont(font)
         self.le_hostPWD.setText(_fromUtf8(""))
+        self.le_hostPWD.setEchoMode(QtGui.QLineEdit.Password)
         self.le_hostPWD.setObjectName(_fromUtf8("le_hostPWD"))
         self.label_2 = QtGui.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(50, 80, 101, 21))
+        self.label_2.setGeometry(QtCore.QRect(40, 80, 121, 21))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Calibri"))
         font.setPointSize(11)
@@ -75,12 +76,13 @@ class Ui_newhost(object):
         newhost.setStatusBar(self.statusbar)
 
         self.retranslateUi(newhost)
+        QtCore.QObject.connect(self.btn_cancel, QtCore.SIGNAL(_fromUtf8("clicked()")), newhost.close)
         QtCore.QMetaObject.connectSlotsByName(newhost)
 
     def retranslateUi(self, newhost):
         newhost.setWindowTitle(_translate("newhost", "连接新服务端", None))
-        self.label.setText(_translate("newhost", "服务端IP地址", None))
-        self.label_2.setText(_translate("newhost", "服务端IP地址", None))
+        self.label.setText(_translate("newhost", "服务端IP地址:", None))
+        self.label_2.setText(_translate("newhost", "服务端连接密码:", None))
         self.btn_connect.setText(_translate("newhost", "连接", None))
         self.btn_cancel.setText(_translate("newhost", "取消", None))
 

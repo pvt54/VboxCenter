@@ -36,7 +36,7 @@
      </font>
     </property>
     <property name="text">
-     <string>服务端IP地址</string>
+     <string>服务端IP地址:</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="le_hostIPAddr">
@@ -73,13 +73,16 @@
     <property name="text">
      <string/>
     </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
    </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>40</x>
       <y>80</y>
-      <width>101</width>
+      <width>121</width>
       <height>21</height>
      </rect>
     </property>
@@ -90,7 +93,7 @@
      </font>
     </property>
     <property name="text">
-     <string>服务端IP地址</string>
+     <string>服务端连接密码:</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_connect">
@@ -123,5 +126,22 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btn_cancel</sender>
+   <signal>clicked()</signal>
+   <receiver>newhost</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>202</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>273</x>
+     <y>168</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

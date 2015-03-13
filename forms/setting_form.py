@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'setting.ui'
+# Form implementation generated from reading ui file 'setting_form.ui'
 #
-# Created: Sat Mar 07 16:44:20 2015
+# Created: Fri Mar 13 15:11:02 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -136,21 +136,21 @@ class Ui_setting_form(object):
         self.tb_description.setGeometry(QtCore.QRect(40, 290, 256, 131))
         self.tb_description.setObjectName(_fromUtf8("tb_description"))
         self.label_10 = QtGui.QLabel(self.centralwidget)
-        self.label_10.setGeometry(QtCore.QRect(310, 130, 81, 21))
+        self.label_10.setGeometry(QtCore.QRect(310, 150, 81, 21))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Calibri"))
         font.setPointSize(10)
         self.label_10.setFont(font)
         self.label_10.setObjectName(_fromUtf8("label_10"))
         self.lab_vmdiskname = QtGui.QLabel(self.centralwidget)
-        self.lab_vmdiskname.setGeometry(QtCore.QRect(390, 130, 231, 21))
+        self.lab_vmdiskname.setGeometry(QtCore.QRect(390, 150, 231, 21))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Calibri"))
         font.setPointSize(10)
         self.lab_vmdiskname.setFont(font)
         self.lab_vmdiskname.setObjectName(_fromUtf8("lab_vmdiskname"))
         self.btn_opendir = QtGui.QPushButton(self.centralwidget)
-        self.btn_opendir.setGeometry(QtCore.QRect(630, 130, 41, 23))
+        self.btn_opendir.setGeometry(QtCore.QRect(630, 150, 41, 23))
         self.btn_opendir.setObjectName(_fromUtf8("btn_opendir"))
         self.label_11 = QtGui.QLabel(self.centralwidget)
         self.label_11.setGeometry(QtCore.QRect(310, 190, 91, 21))
@@ -227,6 +227,27 @@ class Ui_setting_form(object):
         self.cheakb_NAenabled.setAcceptDrops(False)
         self.cheakb_NAenabled.setChecked(False)
         self.cheakb_NAenabled.setObjectName(_fromUtf8("cheakb_NAenabled"))
+        self.tab_bootorder = QtGui.QTableWidget(self.centralwidget)
+        self.tab_bootorder.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)#设定table的项目为不可编辑
+        self.tab_bootorder.setGeometry(QtCore.QRect(370, 40, 71, 111))
+        self.tab_bootorder.setObjectName(_fromUtf8("tab_bootorder"))
+        self.tab_bootorder.setColumnCount(0)
+        self.tab_bootorder.setRowCount(0)
+        self.label_16 = QtGui.QLabel(self.centralwidget)
+        self.label_16.setGeometry(QtCore.QRect(310, 30, 61, 21))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("Calibri"))
+        font.setPointSize(10)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_16.setFont(font)
+        self.label_16.setObjectName(_fromUtf8("label_16"))
+        self.btn_up = QtGui.QPushButton(self.centralwidget)
+        self.btn_up.setGeometry(QtCore.QRect(460, 50, 75, 23))
+        self.btn_up.setObjectName(_fromUtf8("btn_up"))
+        self.btn_down = QtGui.QPushButton(self.centralwidget)
+        self.btn_down.setGeometry(QtCore.QRect(460, 110, 75, 23))
+        self.btn_down.setObjectName(_fromUtf8("btn_down"))
         setting_form.setCentralWidget(self.centralwidget)
         self.statusbar = QtGui.QStatusBar(setting_form)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -258,4 +279,7 @@ class Ui_setting_form(object):
         self.btn_MACgenerator.setText(_translate("setting_form", "随机生成", None))
         self.cheakb_cableconnected.setText(_translate("setting_form", "接入网线", None))
         self.cheakb_NAenabled.setText(_translate("setting_form", "启用", None))
+        self.label_16.setText(_translate("setting_form", "引导顺序:", None))
+        self.btn_up.setText(_translate("setting_form", "上移", None))
+        self.btn_down.setText(_translate("setting_form", "下移", None))
 

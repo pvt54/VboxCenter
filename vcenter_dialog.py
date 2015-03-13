@@ -2,10 +2,6 @@
 __author__ = '54'
 import sys,os
 sys.path.append('forms')
-import time
-import socket
-import select
-import threading
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from forms.test import Ui_MainWindow
