@@ -58,11 +58,10 @@ class VirtualMachineInfo():
     #sc_name表示
     Medium=[]
 
-    #虚拟机媒体附加关系(list)
-    #结构:MediumAttachment中的元素均为存放了IMediumAttachment对象属性的列表,其存放顺序为:[name(str)(medium.name),name(str)(StorageController.name]),port(int),device=0(int),type(int)(搭配常数字典DeviceType)]
+    #结构:MediumAttachment中的元素均为存放了IMediumAttachment对象属性的列表,其存放顺序为:[name(str)(StorageController.name]),name(str)(medium.name),port(int),device=0(int),type(int)(搭配常数字典DeviceType)]
     MediumAttachment=[]
 
     #虚拟机网络适配器(list)
-    #结构:NetworkAdapter中的元素均为存放了INetworkAdapter对象属性的列表,其存放顺序为:[slot(long),enabled(int),MACAddress(str),attachmentType(int)(需搭配常数字典NetworkAttachmentType),adapterType(int)(需搭配常数字典NetworkAdapterType),cableConnected(bool)]
+    #结构:NetworkAdapter中的元素均为存放了INetworkAdapter对象属性的列表,其存放顺序为:[slot(long),enabled(int),MACAddress(str),attachmentType(int)(需搭配常数字典NetworkAttachmentType),BridgedInterface(str),adapterType(int)(需搭配常数字典NetworkAdapterType),cableConnected(bool)]
     NetworkAdapter=[]
 

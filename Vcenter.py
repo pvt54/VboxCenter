@@ -28,10 +28,10 @@ class Vcenter(QMainWindow):
         self.Hostlist[0].VMList[0].Name='test1'
         self.Hostlist[0].VMList[0].PowerState=1
         #--------------
-        self.treeReflash()
+        self.treeRefrash()
 
-    #QTreeWidget数据刷新宿主机对象列表
-    def treeReflash(self):
+    #QTreeWidget数据刷新宿主机对象列表函数
+    def treeRefrash(self):
         if self.Hostlist != []:
             for i in self.Hostlist:
                 root=QTreeWidgetItem(self.ui.treeWidget)
@@ -45,10 +45,61 @@ class Vcenter(QMainWindow):
                         child=QTreeWidgetItem(root)
                         child.setText(0,ii.Name)
                         if ii.PowerState == 1:
-                            child.setText(1,u'已停止')
+                            child.setText(1,u'停止')
                         elif ii.PowerState == 5:
-                            child.setText((1,u'正在运行'))
+                            child.setText((1,u'运行中'))
             #差一个默认选中第一个host项目的功能
+
+    #刷新Widght_显示数据函数
+    def widgetvmReflash(self):
+        vmname,vmstate,hostname=self.tree_selected()
+        print(vmname,vmstate,hostname)
+        for h in self.Hostlist:
+            if h.Name==hostname:
+                for vm in h.VMList:
+                    if vm.Name==vmname:
+                        self.ui.lab_vmname.setText(str(unicode(vm.Name)))
+                        self.ui.lab_vmcpucount.setText(str(vm.CPUCount))
+                        self.ui.lab_cpuexecutioncap.setTextstr(vm.CPUExecutionCap)
+                        self.ui.lab_vmvmemsize.setText(str(vm.MemorySize))
+                        self.ui.lab_vmosversion.setText(str(vm.OSTypeId))
+                        if vm.PowerState == 1:
+                            self.ui.lab_vmpowerstate.setText(u'停止')
+                            self.ui.btn_vmpowerstate.setText(u'启动')
+                        elif vm.PowerState == 5:
+                            self.ui.lab_vmpowerstate.setText(u'运行中')
+                            self.ui.btn_vmpowerstate.setText(u'停止')
+                        self.ui.tb_vmdescription.append(unicode(vm.Description))
+                        self.ui.lab_vmvmemsize.setText(str(vm.VRAMSize))
+                        self.ui.pgbar_vmcpuusage.setValue(int(vm.CPUUsage))
+                        self.ui.pgbar_vmmemusage.setValue(int(vm.MemoryUsage))
+                        self.ui.lab_vmSCname.setText(str((vm.StStorageControllers[0])[0]))
+                        if (vm.StStorageControllers[0])[0] == 2:
+                            self.ui.lab_vmSCtype.setText(str((vm.StStorageControllers[0])[1]))
+                        for ma in vm.MediumAttachment:
+                            if ma[0]==(vm.StStorageControllers[0])[0]:
+                                self.ui.lab_vmdiskname.setText(str(ma[1]))
+                            if ma[4]==2:
+                                if ma[1] is not None:
+                                    self.ui.lab_vmdvdname.setText(str(ma[1]))
+                                else:
+                                    self.ui.lab_vmdvdname.setText(u'没有碟片')
+                        for m in vm.Medium:
+                            if m[0]==str(self.ui.lab_vmdiskname.text()):
+                                if float(m[3])/1024.0/1024.0/1024.0 > 0:
+                                    self.ui.lab_vmdisksize.setText(str(float(m[3])/1024.0/1024.0/1024.0)+'GB')
+                                else:
+                                    self.ui.lab_vmdisksize.setText(str(float(m[3])/1024.0/1024.0/1024.0)+'MB')
+                        self.ui.lab_vmNA1name.setText(str((vm.NetworkAdapter[0])[4]))
+
+    #刷新Widght_host显示数据函数
+    def widgethostReflash(self):
+        hostname,hoststate,NA=self.tree_selected()
+        print(hostname,hoststate,NA)
+        for h in self.Hostlist:
+            if h.Name==hostname:
+
+
 
     #QTreeWidget的项目选中后操作
     def tree_selected(self):
@@ -60,7 +111,7 @@ class Vcenter(QMainWindow):
         else:
             self.ui.widget_host.show()
             self.ui.widget_vm.hide()
-        return (item[0].text(0),item[0].text(1),item[0].parent() is None)
+        return (item[0].text(0),item[0].text(1),(item[0].parent() is None) or item[0].parent().text(0))
 
     #treeWidget右键菜单,自适应右键对象为Host项目与Vm项目
     def treeWidget_contextmenu(self):
@@ -123,6 +174,9 @@ class Vcenter(QMainWindow):
                     i.isOnline=True
                 else:
                     i.isOnline=False
+
+
+
 
 
 

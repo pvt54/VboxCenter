@@ -29,6 +29,7 @@ class Newhost(QMainWindow):
                 self.IPAddr=self.ui.le_hostIPAddr.text()
             else:
                 QMessageBox.question(self, u'提示', u'IP地址有误')
+            self.Password=self.ui.le_hostPWD.text()
             self.sp.set_conn(self.IPAddr,self.Password)
             self.sp.start()
             time.sleep(1)
