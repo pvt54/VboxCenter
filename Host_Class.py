@@ -32,7 +32,7 @@ class HostInfo():
     #宿主机CPU使用率
     CPUUsage=None
 
-    #宿主机内存使用率
+    #宿主机内存使用率(记得转换为int储存,单位百分比)
     MemoryUsage=None
 
     #宿主机VM文件夹所在分区总大小

@@ -396,7 +396,7 @@ class Ui_Vcenter_form(object):
         QtCore.QObject.connect(self.treeWidget, QtCore.SIGNAL(_fromUtf8("clicked(QModelIndex)")), Vcenter_form.tree_selected)
         #添加treeWidget的右键菜单
         self.treeWidget.customContextMenuRequested[QtCore.QPoint].connect(Vcenter_form.treeWidget_contextmenu)
-        QtCore.QObject.connect(self.action, QtCore.SIGNAL(_fromUtf8("triggered()")), Vcenter_form.connecthost)
+        QtCore.QObject.connect(self.action, QtCore.SIGNAL(_fromUtf8("triggered()")), Vcenter_form.connectnewhost)
 
     def retranslateUi(self, Vcenter_form):
         Vcenter_form.setWindowTitle(_translate("Vcenter_form", "VirtualBox虚拟机管理中心", None))

@@ -58,21 +58,27 @@ class Vcenter(QMainWindow):
             if h.Name==hostname:
                 for vm in h.VMList:
                     if vm.Name==vmname:
+                        if vm.PowerState == 1:
+                            self.ui.lab_vmpowerstate.setText(u'停止')
+                            self.ui.btn_vmpowerstate.setText(u'启动')
+                            self.ui.pgbar_vmcpuusage.setValue(0)
+                            self.ui.pgbar_vmcpuusage.setEnabled(False)
+                            self.ui.pgbar_vmmemusage.setValue(0)
+                            self.ui.pgbar_vmmemusage.setEnabled(False)
+                        elif vm.PowerState == 5:
+                            self.ui.lab_vmpowerstate.setText(u'运行中')
+                            self.ui.btn_vmpowerstate.setText(u'停止')
+                            self.ui.pgbar_vmcpuusage.setEnabled(True)
+                            self.ui.pgbar_vmcpuusage.setValue(int(vm.CPUUsage))
+                            self.ui.pgbar_vmmemusage.setEnabled(True)
+                            self.ui.pgbar_vmmemusage.setValue(int(vm.MemoryUsage))
                         self.ui.lab_vmname.setText(str(unicode(vm.Name)))
                         self.ui.lab_vmcpucount.setText(str(vm.CPUCount))
                         self.ui.lab_cpuexecutioncap.setTextstr(vm.CPUExecutionCap)
                         self.ui.lab_vmvmemsize.setText(str(vm.MemorySize))
                         self.ui.lab_vmosversion.setText(str(vm.OSTypeId))
-                        if vm.PowerState == 1:
-                            self.ui.lab_vmpowerstate.setText(u'停止')
-                            self.ui.btn_vmpowerstate.setText(u'启动')
-                        elif vm.PowerState == 5:
-                            self.ui.lab_vmpowerstate.setText(u'运行中')
-                            self.ui.btn_vmpowerstate.setText(u'停止')
                         self.ui.tb_vmdescription.append(unicode(vm.Description))
                         self.ui.lab_vmvmemsize.setText(str(vm.VRAMSize))
-                        self.ui.pgbar_vmcpuusage.setValue(int(vm.CPUUsage))
-                        self.ui.pgbar_vmmemusage.setValue(int(vm.MemoryUsage))
                         self.ui.lab_vmSCname.setText(str((vm.StStorageControllers[0])[0]))
                         if (vm.StStorageControllers[0])[0] == 2:
                             self.ui.lab_vmSCtype.setText(str((vm.StStorageControllers[0])[1]))
@@ -98,6 +104,29 @@ class Vcenter(QMainWindow):
         print(hostname,hoststate,NA)
         for h in self.Hostlist:
             if h.Name==hostname:
+                if h.isOnline:
+                    self.ui.pgbar_cpuusage.setEnabled(True)
+                    self.ui.pgbar_cpuusage.setValue(int(h.CPUUsage))
+                    self.ui.pgbar_memusage.setEnabled(True)
+                    self.ui.pgbar_memusage.setValue(int(h.MemoryUsage))
+                    self.ui.pgbar_diskusage.setEnabled(True)
+                    self.ui.pgbar_diskusage.setValue(int(h.DiskUsage))
+                else:
+                    self.ui.pgbar_cpuusage.setEnabled(False)
+                    self.ui.pgbar_cpuusage.setValue(0)
+                    self.ui.pgbar_memusage.setEnabled(False)
+                    self.ui.pgbar_memusage.setValue(0)
+                    self.ui.pgbar_diskusage.setEnabled(False)
+                    self.ui.pgbar_diskusage.setValue(0)
+                self.ui.lab_hostname.setText(str(h.Name))
+                self.ui.lab_IPAddr.setText(str(h.IPAddr))
+                self.ui.lab_hostver.setText(str(h.OSTypeId))
+                self.ui.lab_cpucount.setText(str(h.CoreCount+'核心'+h.CPUCount+'线程'))
+                self.ui.lab_cpuinfo.setText(str(h.CPUInfo))
+                if h.VboxTotalSize >1024:
+                    self.ui.lab_totalsize.setText(str(h.VboxTotalSize/1024))
+                else:
+                    self.ui.lab_totalsize.setText(str(h.VboxTotalSize))
 
 
 
@@ -121,20 +150,20 @@ class Vcenter(QMainWindow):
         if isHost:#如果右键的项目为一个host
             if item_state=='已连接':#判断host状态 (已连接/离线)
                 disconn_action=QAction(u'断开', self)
-                self.connect(disconn_action,SIGNAL('triggered()'),self.fun1)#信号设置:使用self的connect函数进行设定,信号发送者为对应的QAction对象,信号名称为triggered
+                self.connect(disconn_action,SIGNAL('triggered()'),self.disconnect_host)#信号设置:使用self的connect函数进行设定,信号发送者为对应的QAction对象,信号名称为triggered
                 popMenu.addAction(disconn_action)
             else:
                 conn_action=QAction(u'连接', self)
-                self.connect(conn_action,SIGNAL('triggered()'),self.fun1)
+                self.connect(conn_action,SIGNAL('triggered()'),self.connect_host)
                 popMenu.addAction((conn_action))
             new_action=QAction(u'新建虚拟机', self)
             self.connect(new_action,SIGNAL('triggered()'),self.fun1)
             popMenu.addAction(new_action)
             rename_action=QAction(u'重命名', self)
-            self.connect(rename_action,SIGNAL('triggered()'),self.fun1)
+            self.connect(rename_action,SIGNAL('triggered()'),self.rename_host)
             popMenu.addAction(rename_action)
             del_action=QAction(u'删除', self)
-            self.connect(del_action,SIGNAL('triggered()'),self.fun1)
+            self.connect(del_action,SIGNAL('triggered()'),self.delete_host)
             popMenu.addAction(del_action)
         else:#如果右键的项目为一个Vm
             if item_name=='已停止':#判断虚拟机状态(通电/断电)
@@ -158,7 +187,7 @@ class Vcenter(QMainWindow):
         print(str(item_name))
 
     #连接新的宿主机
-    def connecthost(self):
+    def connectnewhost(self):
         sp=Socket_processor()
         host=Newhost()
         host.Vcenter_HostList=self.Hostlist
@@ -166,7 +195,38 @@ class Vcenter(QMainWindow):
         host.show()
         host.exec_()
 
-    #传递给宿主机对象使用的函数,用于通知vcenter与当前连接的宿主机发生的连接状态改变(如已连接/已断开)
+    #断开与一个现有宿主机的连接
+    def disconnect_host(self):
+        hostname,hoststate,NA=self.tree_selected()
+        for h in self.Hostlist:
+            if h.Name==hostname:
+                h.socket_processor.disconn()
+
+    #连接现有的已断开的一个宿主机
+    def connect_host(self):
+        hostname,hoststate,NA=self.tree_selected()
+        for h in self.Hostlist:
+            if h.Name==hostname:
+                h.socket_processor.reset()
+                h.socket_processor.start()
+
+    #重命名宿主机
+    def rename_host(self):
+        #需要一个写入新宿主机名称的对话框
+        pass
+
+    #删除宿主机
+    def delete_host(self):
+        hostname,hoststate,NA=self.tree_selected()
+        for h in self.Hostlist:
+            if h.Name==hostname:
+                h.socket_processor.disconn()
+                self.Hostlist.remove(h)
+        self.treeRefrash()
+
+
+
+    #传递给宿主机对象使用的函数,用于通知vcenter与当前连接的宿主机的连接状态发生改变(如已连接/已断开)
     def hostcallVcenter(self,IPAddr,state):
         for i in self.Hostlist:
             if i.IPAddr==IPAddr:
@@ -174,6 +234,8 @@ class Vcenter(QMainWindow):
                     i.isOnline=True
                 else:
                     i.isOnline=False
+                self.treeRefrash()
+                self.widgethostReflash()
 
 
 
