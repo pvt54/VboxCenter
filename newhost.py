@@ -8,6 +8,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from forms.newhost_form import Ui_newhost
 from socket_processor import Socket_processor
+from Host_Class import HostInfo
 
 class Newhost(QMainWindow):
      def __init__(self,parent=None):
@@ -17,7 +18,7 @@ class Newhost(QMainWindow):
         #新宿主机IP地址和密码
         self.IPAddr=None
         self.Password=None
-        self.sp=Socket_processor()
+        self.host=HostInfo()
         #通过Vcenter实例化Hewhost对象后将Vcenter的HostList引用过来进行本地的操作
         self.Vcenter_HostList=[]
 
@@ -30,19 +31,21 @@ class Newhost(QMainWindow):
             else:
                 QMessageBox.question(self, u'提示', u'IP地址有误')
             self.Password=self.ui.le_hostPWD.text()
-            self.sp.set_conn(self.IPAddr,self.Password)
-            self.sp.start()
+            self.host.Socket_processor.set_conn(self.IPAddr,self.Password)
+            self.host.Socket_processor.start()
             time.sleep(1)
-            if self.sp.loginflag==1:
-                self.Vcenter_HostList.append(self.sp)
+            if self.host.Socket_processor.loginflag==1:
+                self.Vcenter_HostList.append(self.host.Socket_processor)
                 self.close()
-            elif self.sp.loginflag==-1:
+            elif self.host.Socket_processor.loginflag==-1:
                 QMessageBox.question(self, u'提示', u'连接密码错误')
-            elif self.sp.loginflag==-2:
+            elif self.host.Socket_processor.loginflag==-2:
                 QMessageBox.question(self, u'提示',u'网络连接错误,请重试')
          else:
              QMessageBox.question(self, u'提示', u'IP地址与密码不能为空')
 
      #用于将vcenter中的hostcallVcenter函数传递给Socket_processor对象
-     def passit(self,hostcallVcenter):
-        self.sp.callVcenter=hostcallVcenter
+     def passit(self,hostcallVcenter,reportfailure):
+        self.host.reportfailure=reportfailure
+        self.host.hostcallVcenter=hostcallVcenter
+        self.host.Socket_processor.callVcenter=hostcallVcenter

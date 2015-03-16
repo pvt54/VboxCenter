@@ -108,7 +108,7 @@ class Vcenter(QMainWindow):
                     self.ui.pgbar_cpuusage.setEnabled(True)
                     self.ui.pgbar_cpuusage.setValue(int(h.CPUUsage))
                     self.ui.pgbar_memusage.setEnabled(True)
-                    self.ui.pgbar_memusage.setValue(int(h.MemoryUsage))
+                    self.ui.pgbar_memusage.setValue(int(float(h.MemoryAvailable)/float(h.MemorySize)))
                     self.ui.pgbar_diskusage.setEnabled(True)
                     self.ui.pgbar_diskusage.setValue(int(h.DiskUsage))
                 else:
@@ -123,10 +123,13 @@ class Vcenter(QMainWindow):
                 self.ui.lab_hostver.setText(str(h.OSTypeId))
                 self.ui.lab_cpucount.setText(str(h.CoreCount+'核心'+h.CPUCount+'线程'))
                 self.ui.lab_cpuinfo.setText(str(h.CPUInfo))
-                if h.VboxTotalSize >1024:
-                    self.ui.lab_totalsize.setText(str(h.VboxTotalSize/1024))
-                else:
-                    self.ui.lab_totalsize.setText(str(h.VboxTotalSize))
+                self.ui.lab_memsize=h.MemorySize
+                if h.VboxTotalSize >(1024*1024):  #文件夹大小过GB
+                    self.ui.lab_totalsize.setText(str(h.VboxTotalSize/1024.0/1024.0)+'GB')
+                elif h.VboxTotalSize >1024:  #文件夹大小过MB
+                    self.ui.lab_totalsize.setText(str(h.VboxTotalSize/1024.0)+'MB')
+                else:  #文件夹大小只过KB
+                    self.ui.lab_totalsize.setText(str(h.VboxTotalSize)+'KB')
 
 
 
@@ -191,7 +194,7 @@ class Vcenter(QMainWindow):
         sp=Socket_processor()
         host=Newhost()
         host.Vcenter_HostList=self.Hostlist
-        host.passit(self.hostcallVcenter)
+        host.passit(self.hostcallVcenter,)
         host.show()
         host.exec_()
 
@@ -224,18 +227,26 @@ class Vcenter(QMainWindow):
                 self.Hostlist.remove(h)
         self.treeRefrash()
 
+    #当vbox命令执行失败时,弹出对话框显示出错内容(传递至HostInfo对象中使用)
+    def reportfailure(self,failureMSG):
+        MSG=''
+        for i in failureMSG:
+            MSG=MSG+str(i)
+        QMessageBox.question(self, u'发生错误',MSG)
 
 
-    #传递给宿主机对象使用的函数,用于通知vcenter与当前连接的宿主机的连接状态发生改变(如已连接/已断开)
-    def hostcallVcenter(self,IPAddr,state):
+
+    #传递给宿主机对象使用的函数,用于通知vcenter与当前连接的宿主机的连接状态发生改变(如已连接/已断开),或是需要立刻刷新widget面板的请求
+    def hostcallVcenter(self,IPAddr='',state=''):
         for i in self.Hostlist:
             if i.IPAddr==IPAddr:
                 if state==1:
                     i.isOnline=True
                 else:
                     i.isOnline=False
-                self.treeRefrash()
-                self.widgethostReflash()
+        self.treeRefrash()
+        self.widgethostReflash()
+        self.widgetvmReflash()
 
 
 
