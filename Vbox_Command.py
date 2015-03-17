@@ -62,9 +62,18 @@ class Command():
 
     def reply_get_guest_list(self,listset):
         if listset[0]=='success':
+            #需建立已有vm的集合与新vm的集合,2者相减得到新增加的虚拟机名称
+            Oldvmset,Newvmset={}
+            for vm in self.host.VMList:
+                Oldvmset.add(vm.Name)
             for i in range(2,len(listset)-1):
+                Newvmset.add(listset[i])
+
+            vmset=Newvmset-Oldvmset
+
+            for name in vmset:
                 vm=VirtualMachineInfo()
-                vm.Name=listset[i]
+                vm.Name=name
                 self.host.VMList.append(vm)
 
             if listset[len(listset)-1]:
@@ -137,6 +146,9 @@ class Command():
         else:
             self.host.reportfailure(listset)
 
+    def reply_set_guest_memsize(self,listset):
+        self.reply_get_guest_memsize(listset)
+
     def reply_get_guest_performance(self,listset):
         if listset[0]=='success':
             for vm in self.host.VMList:
@@ -164,15 +176,170 @@ class Command():
         if listset[0]=='success':
             for vm in self.host.VMList:
                 if vm.Name==listset[2]:
+                    vm.OSTypeI==listset[3]
 
             if listset[len(listset)-1]:
                 self.host.hostcallVcenter()
         else:
             self.host.reportfailure(listset)
 
+    def reply_set_guest_osversion(self,listset):
+        self.reply_get_guest_osversion(listset)
 
+    def reply_get_guest_bootorder(self,listset):
         if listset[0]=='success':
+            for vm in self.host.VMList:
+                if vm.Name==listset[2]:
+                    for i in range(0,4):
+                        vm.BootOrder[i]=listset[i+3]
 
+            if listset[len(listset)-1]:
+                self.host.hostcallVcenter()
+        else:
+            self.host.reportfailure(listset)
+
+    def reply_set_guest_bootorder(self,listset):
+        self.reply_get_guest_bootorder(listset)
+
+    def reply_get_guest_storagectrls(self,listset):
+        if listset[0]=='success':
+            for vm in self.host.VMList:
+                if vm.Name==listset[2]:
+                    if vm.Name==listset[2]:
+                        i=3
+                        while True:
+                            sc=[]
+                            for i in range(0,4):
+                                sc.append(listset[i])
+                                i=i+1
+                            vm.StorageControllers.append(sc)
+                            if len(listset)==i+1:
+                                break
+
+
+            if listset[len(listset)-1]:
+                self.host.hostcallVcenter()
+        else:
+            self.host.reportfailure(listset)
+
+    def reply_set_guest_storagectrls(self,listset):
+        if listset[0]=='success':
+            for vm in self.host.VMList:
+                if vm.Name==listset[2]:
+
+            if listset[len(listset)-1]:
+                self.host.hostcallVcenter()
+        else:
+            self.host.reportfailure(listset)
+
+    def reply_get_guest_mediumattachmen(self,listset):
+        if listset[0]=='success':
+            for vm in self.host.VMList:
+                if vm.Name==listset[2]:
+                    i=3
+                    while True:
+                        ma=[]
+                        for i in range(0,5):
+                            ma.append(listset[i])
+                            i=i+1
+                        vm.MediumAttachment.append(ma)
+                        if len(listset)==i+1:
+                            break
+            if listset[len(listset)-1]:
+                self.host.hostcallVcenter()
+        else:
+            self.host.reportfailure(listset)
+
+    def reply_get_guest_mediums(self,listset):
+        if listset[0]=='success':
+            for vm in self.host.VMList:
+                if vm.Name==listset[2]:
+                    i=3
+                    while True:
+                        med=[]
+                        for i in range(0,5):
+                            med.append(listset[i])
+                            i=i+1
+                        vm.Medium.append(med)
+                        if len(listset)==i+1:
+                            break
+            if listset[len(listset)-1]:
+                self.host.hostcallVcenter()
+        else:
+            self.host.reportfailure(listset)
+
+    def reply_get_guest_networkadapters(self,listset):
+        if listset[0]=='success':
+            for vm in self.host.VMList:
+                if vm.Name==listset[2]:
+                    i=3
+                    while True:
+                        med=[]
+                        for i in range(0,7):
+                            med.append(listset[i])
+                            i=i+1
+                        vm.NetworkAdapter.append(med)
+                        if len(listset)==i+1:
+                            break
+
+            if listset[len(listset)-1]:
+                self.host.hostcallVcenter()
+        else:
+            self.host.reportfailure(listset)
+
+    def reply_get_host_networkadapters(self,listset):
+        if listset[0]=='success':
+            i=2
+                self.host.HostNetworkAdapter.append(listset[i])
+                i=i+1
+
+            if listset[len(listset)-1]:
+                self.host.hostcallVcenter()
+        else:
+            self.host.reportfailure(listset)
+
+    def reply_get_guest_sharedfolders(self,listset):
+        if listset[0]=='success':
+            for vm in self.host.VMList:
+                if vm.Name==listset[2]:
+                    i=3
+                    while True:
+                        sf=[]
+                        for i in range(0,3):
+                            sf.append(listset[i])
+                            i=i+1
+                        vm.SharedFolders.append(sf)
+                        if len(listset)==i+1:
+                            break
+
+            if listset[len(listset)-1]:
+                self.host.hostcallVcenter()
+        else:
+            self.host.reportfailure(listset)
+
+    def reply_add_guest_mediums_dvd(self,listset):
+        if listset[0]=='success':
+            #------------------------------
+            #如果成功,再执行get_guest_mediumattachmen()与get_guest_medium即可
+            #------------------------------
+            if listset[len(listset)-1]:
+                self.host.hostcallVcenter()
+        else:
+            self.host.reportfailure(listset)
+
+    def reply_del_machine(self,listset):
+        if listset[0]=='success':
+            for vm in self.host.VMList:
+                if vm.Name==listset[2]:
+                    self.host.VMList.remove(vm)
+
+            if listset[len(listset)-1]:
+                self.host.hostcallVcenter()
+        else:
+            self.host.reportfailure(listset)
+
+    def reply_create_new_machine(self,listset):
+        if listset[0]=='success':
 
             if listset[len(listset)-1]:
                 self.host.hostcallVcenter()

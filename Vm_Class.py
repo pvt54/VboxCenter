@@ -65,3 +65,6 @@ class VirtualMachineInfo():
     #结构:NetworkAdapter中的元素均为存放了INetworkAdapter对象属性的列表,其存放顺序为:[slot(long),enabled(int),MACAddress(str),attachmentType(int)(需搭配常数字典NetworkAttachmentType),BridgedInterface(str),adapterType(int)(需搭配常数字典NetworkAdapterType),cableConnected(bool)]
     NetworkAdapter=[]
 
+    #虚拟机PID列表,用于存储虚拟机运行后产生的进程的PID号
+    PIDList=[]
+

@@ -40,6 +40,9 @@ class HostInfo():
     #宿主机CPU使用率
     CPUUsage=None
 
+    #宿主机网络适配器名称(用于虚拟网卡桥接设定)
+    HostNetworkAdapter=[]
+
     #宿主机VM文件夹所在分区总大小
     DiskTotalSize=None
 
