@@ -2,7 +2,6 @@
 __author__ = '54'
 from socket_processor import Socket_processor
 from Vm_Class import  VirtualMachineInfo
-from Host_Class import HostInfo
 
 class Command():
     def __init__(self,host):
@@ -226,7 +225,7 @@ class Command():
         if listset[0]=='success':
             for vm in self.host.VMList:
                 if vm.Name==listset[2]:
-
+                    pass
             if listset[len(listset)-1]:
                 self.host.hostcallVcenter()
         else:
@@ -290,13 +289,13 @@ class Command():
     def reply_get_host_networkadapters(self,listset):
         if listset[0]=='success':
             i=2
-                self.host.HostNetworkAdapter.append(listset[i])
-                i=i+1
+            self.host.HostNetworkAdapter.append(listset[i])
+            i=i+1
 
             if listset[len(listset)-1]:
                 self.host.hostcallVcenter()
         else:
-            self.host.reportfailure(listset)
+                self.host.reportfailure(listset)
 
     def reply_get_guest_sharedfolders(self,listset):
         if listset[0]=='success':
@@ -387,7 +386,7 @@ class Command():
         # 'SET_GUEST_MEDIUMS':set_guest_mediums,(待定)
         'GET_GUEST_MEDIUMS':reply_get_guest_mediums,
         'GET_GUEST_NETWORKADAPTERS':reply_get_guest_networkadapters,
-        'SET_GUEST_NETWORKADAPTERS':reply_set_guest_networkadapters,
+        # 'SET_GUEST_NETWORKADAPTERS':reply_set_guest_networkadapters,
         'GET_HOST_NETWORKADAPTERS':reply_get_host_networkadapters,
         'GET_GUEST_SHAREDFOLDERS':reply_get_guest_sharedfolders,
         # 'ADD_GUEST_SHAREDFOLDERS':add_guest_sharedfolders,(待定)
@@ -395,10 +394,10 @@ class Command():
         'ADD_GUEST_MEDIUMS_DVD':reply_add_guest_mediums_dvd,
         'DEL_MACHINE':reply_del_machine,
         'CREATE_NEW_MACHINE':reply_create_new_machine,
-        'GET_GUEST_DESCRIPTION':reply_get_guest_description,
-        'SET_GUEST_DESCRIPTION':reply_set_guest_description,
-        'MACHINE_POWERON':reply_machine_poweron,
-        'MACHINE_POWEROFF':reply_machine_poweroff,
+        # 'GET_GUEST_DESCRIPTION':reply_get_guest_description,
+        # 'SET_GUEST_DESCRIPTION':reply_set_guest_description,
+        # 'MACHINE_POWERON':reply_machine_poweron,
+        # 'MACHINE_POWEROFF':reply_machine_poweroff,
         }
 
     def vbox_funcation(self,listset):
