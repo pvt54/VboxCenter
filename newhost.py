@@ -24,28 +24,31 @@ class Newhost(QMainWindow):
 
      #连接按钮对应函数
      def connectHost(self):
-         if self.ui.le_hostIPAddr.text()!='' and self.ui.le_hostPWD.text()!='':
-            p = re.compile("^((?:(2[0-4]\d)|(25[0-5])|([01]?\d\d?))\.){3}(?:(2[0-4]\d)|(255[0-5])|([01]?\d\d?))$")
-            if p.search(self.ui.le_hostIPAddr.text()):
-                self.IPAddr=self.ui.le_hostIPAddr.text()
-            else:
-                QMessageBox.question(self, u'提示', u'IP地址有误')
-            self.Password=self.ui.le_hostPWD.text()
-            self.host.Socket_processor.set_conn(self.IPAddr,self.Password)
-            self.host.Socket_processor.start()
-            time.sleep(1)
-            if self.host.Socket_processor.loginflag==1:
-                self.Vcenter_HostList.append(self.host.Socket_processor)
-                self.close()
-            elif self.host.Socket_processor.loginflag==-1:
-                QMessageBox.question(self, u'提示', u'连接密码错误')
-            elif self.host.Socket_processor.loginflag==-2:
-                QMessageBox.question(self, u'提示',u'网络连接错误,请重试')
-         else:
-             QMessageBox.question(self, u'提示', u'IP地址与密码不能为空')
-
+         try:
+             if self.ui.le_hostIPAddr.text()!='' and self.ui.le_hostPWD.text()!='':
+                p = re.compile("^((?:(2[0-4]\d)|(25[0-5])|([01]?\d\d?))\.){3}(?:(2[0-4]\d)|(255[0-5])|([01]?\d\d?))$")
+                if p.search(self.ui.le_hostIPAddr.text()):
+                    self.IPAddr=self.ui.le_hostIPAddr.text()
+                else:
+                    QMessageBox.question(self, u'提示', u'IP地址有误')
+                self.Password=self.ui.le_hostPWD.text()
+                self.host.socket_processor.set_conn(self.IPAddr,self.Password)
+                self.host.socket_processor.start()
+                time.sleep(1)
+                if self.host.socket_processor.loginflag==1:
+                    self.Vcenter_HostList.append(self.host.socket_processor)
+                    self.close()
+                elif self.host.socket_processor.loginflag==-1:
+                    QMessageBox.question(self, u'提示', u'连接密码错误')
+                elif self.host.socket_processor.loginflag==-2:
+                    QMessageBox.question(self, u'提示',u'网络连接错误,请重试')
+             else:
+                 QMessageBox.question(self, u'提示', u'IP地址与密码不能为空')
+         except BaseException,e:
+             self.host.reportfailure('connectHost error:'+str(e))
+             print('connectHost error:'+str(e))
      #用于将vcenter中的hostcallVcenter函数传递给Socket_processor对象
      def passit(self,hostcallVcenter,reportfailure):
         self.host.reportfailure=reportfailure
         self.host.hostcallVcenter=hostcallVcenter
-        self.host.Socket_processor.callVcenter=hostcallVcenter
+        self.host.socket_processor.callVcenter=hostcallVcenter

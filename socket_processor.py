@@ -15,6 +15,7 @@ class Socket_processor(QThread): #注意继承QThread
         self.result_list=[] #命令返回结果集
         self.loginflag=None #登录验证标志,为1为登录成功,-1为密码错误,-2网络错误
         self.callVcenter=None #由Vcenter传递过来的函数,用于通知vcenter与当前连接的宿主机发生的连接状态改变(如已连接/已断开)
+        self.vbox_funcation=None #由Vbox_command传递过来的执行函数
     #封装的传递显示信息的方法
     def tb(self,msg,addr=''):
         print (msg)
@@ -114,14 +115,19 @@ class Socket_processor(QThread): #注意继承QThread
             #开启获取心跳包功能
             self.heartbeat=HeartBeat(self.set_command_list,self.disconnforheartbeating)
             self.heartbeat.start()
-            while True:#开始循环执行命令表中的命令
+            while True:#开始业务处理循环,先判断命令返回结果集列表是否有需要处理的命令,再判断命令列表时候有需要发送的命令
                 if self.disconn_flag==True: #判断是否有断开连接的信号
                         self.tb(u'正在断开连接',self.IPAddr)
                         sock.sendall('exit')
                         raise ServerStop()
                         break
                 #查找命令表表头是否为空,如为空,跳过此轮循环
-                #改造点:加入循环查找结果集list表头是否为空的判断
+                #命令返回结果集list表头是否为空的判断
+                if self.result_list==[]:
+                    pass
+                else:
+                    self.vbox_funcation(self.result_list[0])
+                    self.result_list.pop(0)
                 if self.command_list==[]:
                     continue
                 else:

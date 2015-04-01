@@ -192,11 +192,11 @@ class Vcenter(QMainWindow):
     #连接新的宿主机
     def connectnewhost(self):
         sp=Socket_processor()
-        host=Newhost()
-        host.Vcenter_HostList=self.Hostlist
-        host.passit(self.hostcallVcenter,)
-        host.show()
-        host.exec_()
+        newhostForm=Newhost()
+        newhostForm.Vcenter_HostList=self.Hostlist
+        newhostForm.passit(self.hostcallVcenter,self.reportfailure)
+        newhostForm.show()
+        newhostForm.exec_()
 
     #断开与一个现有宿主机的连接
     def disconnect_host(self):
