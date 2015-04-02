@@ -92,9 +92,98 @@ class Command():
         command='SET_GUEST_BOOTORDER|'+VMName+'|'+boot1+'|'+boot2+'|'+boot3+'|'+boot4+'|'+str(reflash)
         self.host.socket_processor.append_command(command)
 
-    def get_guest_list(self):#该函数在获取所有虚拟机名称的列表之后需调用相应的函数为其填充信息
-        command='GET_GUEST_LIST'
+    def get_guest_storagectrls(self,VMName,reflash=False):
+        command='GET_GUEST_STORAGECTRLS|'+VMName+'|'+str(reflash)
         self.host.socket_processor.append_command(command)
+
+    def set_guest_storagectrls(self,VMName,SCName,ControllerType,useHostIOCache,reflash=False):
+        #useHostIOCache的类型假设为int,有效值为1,0
+        command='SET_GUEST_STORAGECTRLS|'+VMName+'|'+SCName+'|'+ControllerType+'|'+useHostIOCache+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+    def get_guest_mediumattachmen(self,VMName,SCName,reflash=False):
+        command='GET_GUEST_MEDIUMATTACHMEN|'+VMName+'|'+SCName+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+    def get_guest_mediums(self,VMName,SCName,reflash=False):
+        command='GET_GUEST_MEDIUMS|'+VMName+'|'+SCName+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+    def get_guest_networkadapters(self,VMName,reflash=False):
+        command='GET_GUEST_NETWORKADAPTERS|'+VMName+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+    def set_guest_networkadapters(self,VMName,slot,enabled,MACAddress,attachmentType,bridgedInterface,adapterType,cableConnected,reflash=False):
+        command='SET_GUEST_NETWORKADAPTERS|'+VMName+'|'+slot+'|'+enabled+'|'+MACAddress+'|'+attachmentType+'|'+bridgedInterface+'|'+adapterType+'|'+cableConnected+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+    def get_host_networkadapters(self):
+        command='GET_HOST_NETWORKADAPTERS'
+        self.host.socket_processor.append_command(command)
+
+    def get_guest_sharedfolders(self,VMName,reflash=False):
+        command='GET_GUEST_SHAREDFOLDERS|'+VMName+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+    def add_guest_mediums_dvd(self,VMName,SCName,Port,ISOFileName,reflash=False):
+        command='ADD_GUEST_MEDIUMS_DVD|'+VMName+'|'+SCName+'|'+Port+'|'+ISOFileName+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+    def del_machine(self,VMName,reflash=False):
+        command='DEL_MACHINE|'+VMName+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+    def create_new_machine(self,VMName,Description,GuestOSTypes,MemSize,VRAMSize,VdiskName,VdiskSize,reflash=False):
+        command='CREATE_NEW_MACHINE|'+VMName+'|'+Description+'|'+GuestOSTypes+'|'+MemSize+'|'+VRAMSize+'|'+VdiskName+'|'+VdiskSize+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+    def get_guest_description(self,VMName,reflash=False):
+        command='GET_GUEST_DESCRIPTION|'+VMName+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+    def set_guest_description(self,VMName,Description,reflash=False):
+        command='SET_GUEST_DESCRIPTION|'+VMName+'|'+Description+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+    def machine_poweron(self,VMName,reflash=False):
+        command='MACHINE_POWERON|'+VMName+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+    def machine_poweroff(self,VMName,reflash=False):
+        VMPidList=[]
+        for vm in self.host.VMList:
+            if vm.Name==VMName:
+                VMPidList=vm.PIDList
+        command='MACHINE_POWEROFF|'+VMName
+        for pid in VMPidList:
+            command=command+'|'+pid
+        command=command+'|'+str(reflash)
+        self.host.socket_processor.append_command(command)
+
+
+
+    def get_guest_list(self):#该函数在获取所有虚拟机名称的列表
+        command='GET_GUEST_LIST|'
+        self.host.socket_processor.append_command(command)
+
+    #该函数只由reply_get_guest_list函数进行调用,在返回所有虚拟机名称列表并创建对应的对象之后用于填充对象数据
+    def findEmptyVM_and_fillin(self):
+        for vm in self.host.VMList:
+            #通过对VM对象的PowerState属性的None判断来确定是否为空vm对象
+            if vm.PowerState is None:
+                self.get_guest_powerstate(vm.Name)
+                self.get_guest_cpucount(vm.Name)
+                self.get_guest_cpuexecutioncap(vm.Name)
+                self.get_guest_vramsize(vm.Name)
+                self.get_guest_memsize(vm.Name)
+                self.get_guest_osversion(vm.Name)
+                self.get_guest_bootorder(vm.Name)
+                self.get_guest_storagectrls(vm.Name)
+                for sc in vm.StorageControllers:
+                    self.get_guest_mediumattachmen(vm.Name,sc[0])
+                    self.get_guest_mediums(vm.Name,sc[0])
+                self.get_guest_networkadapters(vm.Name)
+                self.get_guest_description(vm.Name)
 
 
 
@@ -172,6 +261,7 @@ class Command():
                     vm=VirtualMachineInfo()
                     vm.Name=name
                     self.host.VMList.append(vm)
+                    self.findEmptyVM_and_fillin()
             elif Newvmset-Oldvmset == set() and Oldvmset-Newvmset != set(): #有删除虚拟机的情况
                 vmset=Oldvmset-Newvmset
                 for name in vmset:
@@ -180,8 +270,6 @@ class Command():
             else:#虚拟机列表无变化
                 pass
 
-            if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter()
         else:
             self.host.reportfailure(listset)
 
@@ -386,7 +474,7 @@ class Command():
                             ma.append(listset[i])
                             i=i+1
                         vm.MediumAttachment.append(ma)
-                        if len(listset)==i+1:
+                        if len(listset)==(i+1):
                             break
             if listset[len(listset)-1]=='True':
                 self.host.hostcallVcenter()
@@ -484,7 +572,7 @@ class Command():
         if listset[0]=='success':
             #------------------
             #成功添加新虚拟机后直接调用本地的get_guest_list方法更新虚拟机列表(VMlist)并填充数据
-            #------------------
+            #-----------------
             if listset[len(listset)-1]=='True':
                 self.host.hostcallVcenter()
         else:
