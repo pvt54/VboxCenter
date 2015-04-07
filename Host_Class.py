@@ -8,7 +8,10 @@ class HostInfo():
     def __init__(self):
 
         #宿主机对象对应的vbox命令操作模块,并将自身作为参数传入
-        command=Command(self)
+        self.command=Command(self)
+        #服务端对应的socket通讯对象
+        self.socket_processor=Socket_processor()
+        self.socket_processor.vbox_function=self.command.vbox_function
 
     #宿主机名称
     Name=None
@@ -57,9 +60,6 @@ class HostInfo():
 
     #服务端包含的虚拟机对象列表
     VMList=[]
-
-    #服务端对应的socket通讯对象
-    socket_processor=Socket_processor()
 
     #Vcenter对象传递过来的失败报告函数
     reportfailure=None

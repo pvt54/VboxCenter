@@ -29,19 +29,38 @@ class Newhost(QMainWindow):
                 p = re.compile("^((?:(2[0-4]\d)|(25[0-5])|([01]?\d\d?))\.){3}(?:(2[0-4]\d)|(255[0-5])|([01]?\d\d?))$")
                 if p.search(self.ui.le_hostIPAddr.text()):
                     self.IPAddr=self.ui.le_hostIPAddr.text()
+                    #通过查询IP验证此服务端是否已被连接
+                    hostflag=False
+                    for i in self.Vcenter_HostList:
+                        if i.IPAddr==self.IPAddr:
+                            hostflag=True
+                    if hostflag:
+                        QMessageBox.question(self,u'提示',u'已连接该服务端')
+                    else:
+                        self.Password=self.ui.le_hostPWD.text()
+                        self.host.socket_processor.set_conn(self.IPAddr,self.Password)
+                        self.host.socket_processor.start()
+                        time.sleep(1)
+                        if self.host.socket_processor.loginflag==1:
+                            self.Vcenter_HostList.append(self.host)
+                            #获取宿主机相关信息
+                            self.host.command.get_host_cpu_usage()
+                            self.host.command.get_host_cpuinfo()
+                            self.host.command.get_host_mem_avail()
+                            self.host.command.get_host_memsize()
+                            self.host.command.get_host_networkadapters()
+                            self.host.command.get_host_storageinfo()
+                            self.host.command.get_host_osversion()
+                            #宿主机默认名称为IP地址
+                            self.host.Name=self.IPAddr
+                            self.host.command.get_guest_list()
+                            self.close()
+                        elif self.host.socket_processor.loginflag==-1:
+                            QMessageBox.question(self, u'提示', u'连接密码错误')
+                        elif self.host.socket_processor.loginflag==-2:
+                            QMessageBox.question(self, u'提示',u'网络连接错误,请重试')
                 else:
                     QMessageBox.question(self, u'提示', u'IP地址有误')
-                self.Password=self.ui.le_hostPWD.text()
-                self.host.socket_processor.set_conn(self.IPAddr,self.Password)
-                self.host.socket_processor.start()
-                time.sleep(1)
-                if self.host.socket_processor.loginflag==1:
-                    self.Vcenter_HostList.append(self.host.socket_processor)
-                    self.close()
-                elif self.host.socket_processor.loginflag==-1:
-                    QMessageBox.question(self, u'提示', u'连接密码错误')
-                elif self.host.socket_processor.loginflag==-2:
-                    QMessageBox.question(self, u'提示',u'网络连接错误,请重试')
              else:
                  QMessageBox.question(self, u'提示', u'IP地址与密码不能为空')
          except BaseException,e:

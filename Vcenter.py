@@ -21,17 +21,27 @@ class Vcenter(QMainWindow):
         #放置宿主机对象的列表
         self.Hostlist=[]
         #-----测试-----
-        self.Hostlist.append(HostInfo())
-        self.Hostlist[0].Name='127'
-        self.Hostlist[0].isOnline=False
-        self.Hostlist[0].VMList.append(VirtualMachineInfo())
-        self.Hostlist[0].VMList[0].Name='test1'
-        self.Hostlist[0].VMList[0].PowerState=1
+        # self.Hostlist.append(HostInfo())
+        # self.Hostlist[0].Name='127'
+        # self.Hostlist[0].isOnline=False
+        # self.Hostlist[0].VMList.append(VirtualMachineInfo())
+        # self.Hostlist[0].VMList[0].Name='test1'
+        # self.Hostlist[0].VMList[0].PowerState=1
         #--------------
         self.treeRefrash()
 
     #QTreeWidget数据刷新宿主机对象列表函数
     def treeRefrash(self):
+        #清除现有数据
+        ItemCount=self.ui.treeWidget.topLevelItemCount()
+        for i in range(0,ItemCount):
+            item=self.ui.treeWidget.topLevelItem(i)
+            childlist=item.takeChildren()
+            for childitem in childlist:
+                del childitem
+            self.ui.treeWidget.takeTopLevelItem(i)
+            del item
+        #重新添加数据
         if self.Hostlist != []:
             for i in self.Hostlist:
                 root=QTreeWidgetItem(self.ui.treeWidget)
@@ -40,6 +50,7 @@ class Vcenter(QMainWindow):
                     root.setText(1,u'已连接')
                 else:
                     root.setText(1,u'未连接')
+                    root.childCount()
                 if i.VMList != []:
                     for ii in i.VMList:
                         child=QTreeWidgetItem(root)
@@ -48,7 +59,11 @@ class Vcenter(QMainWindow):
                             child.setText(1,u'停止')
                         elif ii.PowerState == 5:
                             child.setText((1,u'运行中'))
-            #差一个默认选中第一个host项目的功能
+        if (self.ui.treeWidget.topLevelItemCount())>0:
+            (self.ui.treeWidget.topLevelItem(0)).setSelected(True)
+            print('setSelected')
+            self.tree_selected()
+            #默认选中第一个host项目
 
     #刷新Widght_显示数据函数
     def widgetvmReflash(self):
@@ -138,11 +153,11 @@ class Vcenter(QMainWindow):
         item=self.ui.treeWidget.selectedItems()
         print(item[0].text(0)+' is selected !')
         if item[0].parent() is None:
-            self.ui.widget_vm.show()
-            self.ui.widget_host.hide()
-        else:
             self.ui.widget_host.show()
             self.ui.widget_vm.hide()
+        else:
+            self.ui.widget_vm.show()
+            self.ui.widget_host.hide()
         return (item[0].text(0),item[0].text(1),(item[0].parent() is None) or item[0].parent().text(0))
 
     #treeWidget右键菜单,自适应右键对象为Host项目与Vm项目
@@ -191,7 +206,6 @@ class Vcenter(QMainWindow):
 
     #连接新的宿主机
     def connectnewhost(self):
-        sp=Socket_processor()
         newhostForm=Newhost()
         newhostForm.Vcenter_HostList=self.Hostlist
         newhostForm.passit(self.hostcallVcenter,self.reportfailure)
@@ -237,16 +251,17 @@ class Vcenter(QMainWindow):
 
 
     #传递给宿主机对象使用的函数,用于通知vcenter与当前连接的宿主机的连接状态发生改变(如已连接/已断开),或是需要立刻刷新widget面板的请求
-    def hostcallVcenter(self,IPAddr='',state=''):
+    def hostcallVcenter(self,IPAddr='',state='',reflash=''):
         for i in self.Hostlist:
             if i.IPAddr==IPAddr:
                 if state==1:
                     i.isOnline=True
                 else:
                     i.isOnline=False
-        self.treeRefrash()
-        self.widgethostReflash()
-        self.widgetvmReflash()
+        if reflash==1:
+            self.treeRefrash()
+            self.widgethostReflash()
+            self.widgetvmReflash()
 
 
 

@@ -15,7 +15,7 @@ class Socket_processor(QThread): #注意继承QThread
         self.result_list=[] #命令返回结果集
         self.loginflag=None #登录验证标志,为1为登录成功,-1为密码错误,-2网络错误
         self.callVcenter=None #由Vcenter传递过来的函数,用于通知vcenter与当前连接的宿主机发生的连接状态改变(如已连接/已断开)
-        self.vbox_funcation=None #由Vbox_command传递过来的执行函数
+        self.vbox_function=None #由Vbox_command传递过来的执行函数
     #封装的传递显示信息的方法
     def tb(self,msg,addr=''):
         print (msg)
@@ -75,7 +75,7 @@ class Socket_processor(QThread): #注意继承QThread
                     self.tb(u'验证成功,已连接',self.IPAddr)
                     #发送成功连接信号
                     #self.emit(SIGNAL('set_flag(int)'),1)
-                    self.callVcenter(self.IPAddr,1)
+                    self.callVcenter(self.IPAddr,1,0)
                     self.loginflag=1
                     #开始进入业务处理函数
                     self.link_processor(self.msg_sock)
@@ -90,7 +90,7 @@ class Socket_processor(QThread): #注意继承QThread
             self.tb(u'连接断开',self.IPAddr)
 
             #发送成功断开信号
-            self.callVcenter(self.IPAddr,0)
+            self.callVcenter(self.IPAddr,0,1)
             #self.emit(SIGNAL('set_flag(int)'),2)
         except socket.error,e:
             self.tb(u'网络连接错误,请重试')
@@ -103,18 +103,21 @@ class Socket_processor(QThread): #注意继承QThread
     def disconn(self):
         if self.msg_sock is not None:
             self.disconn_flag=True
+            self.callVcenter(self.IPAddr,0,1)
             #self.emit(SIGNAL("set_info(QString)"),time.asctime()+':  socket is not open !')
 
     def disconnforheartbeating(self):
         self.disconn_flag=True
+        self.callVcenter(self.IPAddr,0,1)
         self.tb(u'与宿主机的连接中断',self.IPAddr)
 
     def link_processor(self,sock): #连接处理函数
         self.tb(u'开始与宿主机进行通讯',self.IPAddr)
         try:
-            #开启获取心跳包功能
-            self.heartbeat=HeartBeat(self.set_command_list,self.disconnforheartbeating)
-            self.heartbeat.start()
+            #------------------------------开启获取心跳包功能-------------------------------
+            # self.heartbeat=HeartBeat(self.append_command,self.disconnforheartbeating)
+            # self.heartbeat.start()
+            #------------------------------开启获取心跳包功能--------------------------------
             while True:#开始业务处理循环,先判断命令返回结果集列表是否有需要处理的命令,再判断命令列表时候有需要发送的命令
                 if self.disconn_flag==True: #判断是否有断开连接的信号
                         self.tb(u'正在断开连接',self.IPAddr)
@@ -122,12 +125,6 @@ class Socket_processor(QThread): #注意继承QThread
                         raise ServerStop()
                         break
                 #查找命令表表头是否为空,如为空,跳过此轮循环
-                #命令返回结果集list表头是否为空的判断
-                if self.result_list==[]:
-                    pass
-                else:
-                    self.vbox_funcation(self.result_list[0])
-                    self.result_list.pop(0)
                 if self.command_list==[]:
                     continue
                 else:
@@ -149,20 +146,18 @@ class Socket_processor(QThread): #注意继承QThread
                     if list[0]=='exit':
                         self.tb(u'宿主机服务被关闭,连接中断',self.IPAddr)
                         raise ServerStop()
-                    if list[0]=='heartbeating':
-                        self.heartbeat.inHeartBeating()
+                    # elif list[0]=='heartbeating':
+                    #     self.heartbeat.inHeartBeating()
                         #self.tb(u'收到心跳包,来自',self.IPaddr)
-                    self.result_list.append(list)
-                    if list[0]=='success':
-                        print('??')
-                        self.tb(u'命令已执行完成',self.IPAddr)
-                        # #加个命令完成信号
-                        # self.emit(SIGNAL('set_flag(int)'),3)
-                        print(list)
-                    elif list[0]=='failure':
-                        self.tb(u'命令执行失败',self.IPAddr)
-                        #加个命令执行失败信号
-                        # self.emit(SIGNAL('set_flag(int)'),4)
+                    else:
+                        self.result_list.append(list)
+                    #命令返回结果集list表头是否为空的判断
+                    if self.result_list==[]:
+                        pass
+                    else:
+                        self.vbox_function(self.result_list[0])
+                        self.result_list.pop(0)
+
 
             #-----------执行命令表中的命令的循环结束------------------
             #self.emit(SIGNAL('set_flag(int)'),2)
