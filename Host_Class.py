@@ -2,16 +2,21 @@
 __author__ = 'Razy.Chen'
 from socket_processor import *
 from Vm_Class import VirtualMachineInfo
-from Vbox_Command import Command
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 #服务端宿主机信息类,用于储存宿主机相关信息,其中包涵虚拟机信息类与跟服务端宿主机通讯的socket_processor对象及其相关函数
-class HostInfo():
-    def __init__(self):
-
+class HostInfo(QMainWindow):
+    def __init__(self,Vcenter):
+        QWidget.__init__(self,parent=None)
+        #Vcenter实例化对象,用于定义信号
+        self.Vcenter=Vcenter
         #宿主机对象对应的vbox命令操作模块,并将自身作为参数传入
-        self.command=Command(self)
         #服务端对应的socket通讯对象
         self.socket_processor=Socket_processor()
-        self.socket_processor.vbox_function=self.command.vbox_function
+        self.socket_processor.vb.host=self
+        self.socket_processor.callVcenter=self.hostcallVcenter
+        self.connect(self,SIGNAL('callVcenter(QString,QString,QString)'),self.Vcenter.hostcallVcenter)
+        self.connect(self,SIGNAL('reportfailure(QString)'),self.Vcenter.reportfailure)
 
     #宿主机名称
     Name=None
@@ -61,8 +66,14 @@ class HostInfo():
     #服务端包含的虚拟机对象列表
     VMList=[]
 
-    #Vcenter对象传递过来的失败报告函数
-    reportfailure=None
+    #向Vcenter发送产生错误的信号的函数
+    def reportfailure(self,failureMSG):
+        self.emit(SIGNAL('reportfailure(QString)'),failureMSG)
 
-    #Vcenter对象传递过来的通知函数,用于通知vcenter与当前连接的宿主机发生的状态改变
-    hostcallVcenter=None
+    #向Vcenter发送状态的信号的函数
+    def hostcallVcenter(self,IPAddr='',state='',reflash=''):
+        state=QString(state)
+        reflash=QString(reflash)
+        self.emit(SIGNAL('callVcenter(QString,QString,QString)'),IPAddr,state,reflash)
+        print('Host.Info.hostcallVcenter')
+        print(IPAddr,state,reflash)

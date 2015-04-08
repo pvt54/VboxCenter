@@ -4,6 +4,7 @@ from PyQt4.QtCore import *
 import socket
 import time
 from GetHeartBeat import HeartBeat
+from Vbox_Command import Command
 
 class Socket_processor(QThread): #注意继承QThread
     def __init__(self,parent=None):
@@ -15,7 +16,7 @@ class Socket_processor(QThread): #注意继承QThread
         self.result_list=[] #命令返回结果集
         self.loginflag=None #登录验证标志,为1为登录成功,-1为密码错误,-2网络错误
         self.callVcenter=None #由Vcenter传递过来的函数,用于通知vcenter与当前连接的宿主机发生的连接状态改变(如已连接/已断开)
-        self.vbox_function=None #由Vbox_command传递过来的执行函数
+        self.vb=Command() #由Vbox_command传递过来的执行函数
     #封装的传递显示信息的方法
     def tb(self,msg,addr=''):
         print (msg)
@@ -103,12 +104,10 @@ class Socket_processor(QThread): #注意继承QThread
     def disconn(self):
         if self.msg_sock is not None:
             self.disconn_flag=True
-            self.callVcenter(self.IPAddr,0,1)
             #self.emit(SIGNAL("set_info(QString)"),time.asctime()+':  socket is not open !')
 
     def disconnforheartbeating(self):
-        self.disconn_flag=True
-        self.callVcenter(self.IPAddr,0,1)
+        self.disconn()
         self.tb(u'与宿主机的连接中断',self.IPAddr)
 
     def link_processor(self,sock): #连接处理函数
@@ -129,7 +128,8 @@ class Socket_processor(QThread): #注意继承QThread
                     continue
                 else:
                     sock.sendall(self.command_list[0])
-                    self.tb(u'命令 ['+self.command_list.pop(0)+u'] 已发送',self.IPAddr)
+                    self.command_list.pop(0)
+                    #self.tb(u'命令 ['+self.command_list.pop(0)+u'] 已发送',self.IPAddr)
                     while True:#循环recv()循环
                         if self.disconn_flag==True: #判断是否有断开连接的信号
                             self.tb(u'正在断开连接',self.IPAddr)
@@ -155,7 +155,7 @@ class Socket_processor(QThread): #注意继承QThread
                     if self.result_list==[]:
                         pass
                     else:
-                        self.vbox_function(self.result_list[0])
+                        self.vb.vbox_function(self.result_list[0])
                         self.result_list.pop(0)
 
 

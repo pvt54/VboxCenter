@@ -1,11 +1,10 @@
 # -*- coding: utf8 -*-
 __author__ = '54'
-from socket_processor import Socket_processor
-from Vm_Class import  VirtualMachineInfo
+from Vm_Class import VirtualMachineInfo
 
 class Command():
-    def __init__(self,host):
-        self.host=host
+    def __init__(self):
+        self.host=None #传递过来的对应的hostinfo对象
 
 
     def get_host_osversion(self,reflash=False):
@@ -85,7 +84,7 @@ class Command():
         self.host.socket_processor.append_command(command)
 
     def get_guest_bootorder(self,VMName,reflash=False):
-        command='GET_GUEST_BOOTORDER｜'+VMName+'|'+str(reflash)
+        command='GET_GUEST_BOOTORDER|'+VMName+'|'+str(reflash)
         self.host.socket_processor.append_command(command)
 
     def set_guest_bootorder(self,VMName,boot1,boot2,boot3,boot4,reflash=False):
@@ -185,7 +184,7 @@ class Command():
                     self.get_guest_mediums(vm.Name,sc[0])
                 self.get_guest_networkadapters(vm.Name)
                 self.get_guest_description(vm.Name)
-
+        print('fillin complete')
         self.host.hostcallVcenter('','',1)
 
 
@@ -435,7 +434,7 @@ class Command():
             for vm in self.host.VMList:
                 if vm.Name==listset[2]:
                     for i in range(0,4):
-                        vm.BootOrder[i]=listset[i+3]
+                        vm.BootOrder=listset[i+3]
 
             if listset[len(listset)-1]=='True':
                 self.host.hostcallVcenter('','',1)

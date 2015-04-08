@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 __author__ = '54'
-import sys,os
+import sys,os,time
 sys.path.append('forms')
 import threading
 from PyQt4.QtCore import *
@@ -21,7 +21,7 @@ class Vcenter(QMainWindow):
         #放置宿主机对象的列表
         self.Hostlist=[]
         #-----测试-----
-        # self.Hostlist.append(HostInfo())
+        # self.Hostlist.append(HostInfo(self))
         # self.Hostlist[0].Name='127'
         # self.Hostlist[0].isOnline=False
         # self.Hostlist[0].VMList.append(VirtualMachineInfo())
@@ -34,13 +34,14 @@ class Vcenter(QMainWindow):
     def treeRefrash(self):
         #清除现有数据
         ItemCount=self.ui.treeWidget.topLevelItemCount()
-        for i in range(0,ItemCount):
-            item=self.ui.treeWidget.topLevelItem(i)
-            childlist=item.takeChildren()
-            for childitem in childlist:
-                del childitem
-            self.ui.treeWidget.takeTopLevelItem(i)
-            del item
+        if ItemCount>0:
+            for i in range(0,ItemCount):
+                # item=self.ui.treeWidget.topLevelItem(i)
+                # childlist=item.takeChildren()
+                # for childitem in childlist:
+                #     del childitem
+                self.ui.treeWidget.takeTopLevelItem(i)
+                # del item
         #重新添加数据
         if self.Hostlist != []:
             for i in self.Hostlist:
@@ -206,9 +207,9 @@ class Vcenter(QMainWindow):
 
     #连接新的宿主机
     def connectnewhost(self):
-        newhostForm=Newhost()
+        newhostForm=Newhost(self)
         newhostForm.Vcenter_HostList=self.Hostlist
-        newhostForm.passit(self.hostcallVcenter,self.reportfailure)
+        #newhostForm.passit(self.hostcallVcenter,self.reportfailure)
         newhostForm.show()
         newhostForm.exec_()
 
@@ -252,13 +253,16 @@ class Vcenter(QMainWindow):
 
     #传递给宿主机对象使用的函数,用于通知vcenter与当前连接的宿主机的连接状态发生改变(如已连接/已断开),或是需要立刻刷新widget面板的请求
     def hostcallVcenter(self,IPAddr='',state='',reflash=''):
+        print('Vcenter.hostcallVcenter')
+        print(IPAddr,state,reflash)
         for i in self.Hostlist:
             if i.IPAddr==IPAddr:
+                state=int(state)
                 if state==1:
                     i.isOnline=True
                 else:
                     i.isOnline=False
-        if reflash==1:
+        if reflash=='1':
             self.treeRefrash()
             self.widgethostReflash()
             self.widgetvmReflash()
