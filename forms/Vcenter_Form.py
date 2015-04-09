@@ -93,7 +93,7 @@ class Ui_Vcenter_form(object):
         self.lab_IPAddr.setFont(font)
         self.lab_IPAddr.setObjectName(_fromUtf8("lab_IPAddr"))
         self.lab_hostver = QtGui.QLabel(self.widget_host)
-        self.lab_hostver.setGeometry(QtCore.QRect(20, 130, 121, 31))
+        self.lab_hostver.setGeometry(QtCore.QRect(20, 130, 250, 31))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Calibri"))
         font.setPointSize(12)

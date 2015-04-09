@@ -68,6 +68,7 @@ class HostInfo(QMainWindow):
 
     #向Vcenter发送产生错误的信号的函数
     def reportfailure(self,failureMSG):
+        failureMSG=str(failureMSG)
         self.emit(SIGNAL('reportfailure(QString)'),failureMSG)
 
     #向Vcenter发送状态的信号的函数

@@ -47,7 +47,7 @@ class VirtualMachineInfo():
 
     #虚拟机引导顺序(list)(搭配参数字典DeviceType)
     #结构:列表长度最长4位,存放DeviceType对应的启动设备序号
-    BootOrder=[]
+    BootOrder=[0, 0, 0, 0]
 
     #虚拟机存储控制器(list)
     #结构:StorageControllers中的元素均为存放了IStorageController对象属性的列表,其存放顺序为:[Name(str),Bus(int)(搭配常数字典StorageBus),ControllerType(int)(搭配常数字典StorageControllerType),useHostIOCache(bool)]

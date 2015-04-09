@@ -50,6 +50,10 @@ class Ui_newhost(object):
         self.le_hostIPAddr.setObjectName(_fromUtf8("le_hostIPAddr"))
         self.le_hostPWD = QtGui.QLineEdit(self.centralwidget)
         self.le_hostPWD.setGeometry(QtCore.QRect(150, 80, 121, 21))
+        #------------------测试用预填写的本地服务器与密码-------------------
+        self.le_hostIPAddr.setText('127.0.0.1')
+        self.le_hostPWD.setText('123')
+        #-------------------------------------------------------------------
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Calibri"))
         font.setPointSize(11)

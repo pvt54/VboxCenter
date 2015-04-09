@@ -54,6 +54,8 @@ class Newhost(QMainWindow):
                             self.host.socket_processor.vb.get_host_osversion()
                             #宿主机默认名称为IP地址
                             self.host.Name=self.IPAddr
+                            self.host.IPAddr=self.IPAddr
+                            print('IP : '+self.IPAddr)
                             self.host.socket_processor.vb.get_guest_list()
                             self.close()
                         elif self.host.socket_processor.loginflag==-1:

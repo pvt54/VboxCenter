@@ -179,13 +179,9 @@ class Command():
                 self.get_guest_osversion(vm.Name)
                 self.get_guest_bootorder(vm.Name)
                 self.get_guest_storagectrls(vm.Name)
-                for sc in vm.StorageControllers:
-                    self.get_guest_mediumattachmen(vm.Name,sc[0])
-                    self.get_guest_mediums(vm.Name,sc[0])
                 self.get_guest_networkadapters(vm.Name)
-                self.get_guest_description(vm.Name)
+                self.get_guest_description(vm.Name,True)
         print('fillin complete')
-        self.host.hostcallVcenter('','',1)
 
 
 
@@ -200,7 +196,7 @@ class Command():
 
     def reply_get_host_osversion(self,listset):
         if listset[0]=='success':
-            self.host.OSTypeId=listset[2]+listset[3]
+            self.host.OSTypeId=listset[2]+'  '+listset[3]
             if listset[len(listset)-1]=='True':
                 self.host.hostcallVcenter('','',1)
         else:
@@ -242,9 +238,10 @@ class Command():
 
     def reply_get_host_storageinfo(self,listset):
         if listset[0]=='success':
-            self.host.DiskTotalSize=listset[3]
-            self.host.DiskTotalSize=listset[4]
-            self.host.DiskTotalSize=listset[6]
+            self.host.DiskTotalSize=listset[2]
+            self.host.DiskUsageSize=listset[3]
+            self.host.DiskUsage=listset[4]
+            self.host.VboxTotalSize=listset[5]
             if listset[len(listset)-1]=='True':
                 self.host.hostcallVcenter('','',1)
         else:
@@ -459,10 +456,12 @@ class Command():
                         i=3
                         while True:
                             sc=[]
-                            for i in range(0,4):
+                            for ii in range(0,4):
                                 sc.append(listset[i])
                                 i=i+1
                             vm.StorageControllers.append(sc)
+                            self.get_guest_mediumattachmen(listset[2],sc[0])
+                            self.get_guest_mediums(listset[2],sc[0])
                             if len(listset)==i+1:
                                 break
 
@@ -487,7 +486,7 @@ class Command():
                     i=3
                     while True:
                         ma=[]
-                        for i in range(0,5):
+                        for ii in range(0,5):
                             ma.append(listset[i])
                             i=i+1
                         vm.MediumAttachment.append(ma)
@@ -505,7 +504,7 @@ class Command():
                     i=3
                     while True:
                         med=[]
-                        for i in range(0,5):
+                        for ii in range(0,5):
                             med.append(listset[i])
                             i=i+1
                         vm.Medium.append(med)
@@ -523,7 +522,7 @@ class Command():
                     i=3
                     while True:
                         med=[]
-                        for i in range(0,7):
+                        for ii in range(0,7):
                             med.append(listset[i])
                             i=i+1
                         vm.NetworkAdapter.append(med)
