@@ -15,7 +15,7 @@ class HostInfo(QMainWindow):
         self.socket_processor=Socket_processor()
         self.socket_processor.vb.host=self
         self.socket_processor.callVcenter=self.hostcallVcenter
-        self.connect(self,SIGNAL('callVcenter(QString,QString,QString)'),self.Vcenter.hostcallVcenter)
+        self.connect(self,SIGNAL('callVcenter(QString,QString,QString,QString)'),self.Vcenter.hostcallVcenter)
         self.connect(self,SIGNAL('reportfailure(QString)'),self.Vcenter.reportfailure)
 
     #宿主机名称
@@ -72,9 +72,10 @@ class HostInfo(QMainWindow):
         self.emit(SIGNAL('reportfailure(QString)'),failureMSG)
 
     #向Vcenter发送状态的信号的函数
-    def hostcallVcenter(self,IPAddr='',state='',reflash=''):
+    def hostcallVcenter(self,IPAddr='',state='',reflashtree='',reflash=''):
         state=QString(state)
+        reflashtree=QString(reflashtree)
         reflash=QString(reflash)
-        self.emit(SIGNAL('callVcenter(QString,QString,QString)'),IPAddr,state,reflash)
-        print('Host.Info.hostcallVcenter')
-        print(IPAddr,state,reflash)
+        self.emit(SIGNAL('callVcenter(QString,QString,QString,QString)'),IPAddr,state,reflashtree,reflash)
+        # print('Host.Info.hostcallVcenter')
+        # print(IPAddr,state,reflashtree,reflash)

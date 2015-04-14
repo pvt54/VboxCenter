@@ -161,8 +161,8 @@ class Command():
 
 
 
-    def get_guest_list(self):#该函数在获取所有虚拟机名称的列表
-        command='GET_GUEST_LIST'
+    def get_guest_list(self,reflash=False):#该函数在获取所有虚拟机名称的列表
+        command='GET_GUEST_LIST|'+'|'+str(reflash)
         self.host.socket_processor.append_command(command)
         print ('call get_guest_list')
 
@@ -198,7 +198,7 @@ class Command():
         if listset[0]=='success':
             self.host.OSTypeId=listset[2]+'  '+listset[3]
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -208,7 +208,7 @@ class Command():
             self.host.CoreCount=listset[3]
             self.host.CPUCount=listset[4]
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -216,7 +216,7 @@ class Command():
         if listset[0]=='success':
             self.host.CPUUsage=listset[2]
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -224,7 +224,7 @@ class Command():
         if listset[0]=='success':
             self.host.MemorySize=listset[2]
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -232,7 +232,7 @@ class Command():
         if listset[0]=='success':
             self.host.MemoryAvailable=listset[2]
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -243,7 +243,7 @@ class Command():
             self.host.DiskUsage=listset[4]
             self.host.VboxTotalSize=listset[5]
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -283,7 +283,8 @@ class Command():
             else:#虚拟机列表无变化
                 print('无变化')
                 pass
-
+            if listset[len(listset)-1]=='True':
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -294,7 +295,7 @@ class Command():
                     vm.PowerState=listset[3]
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -305,7 +306,7 @@ class Command():
                     vm.CPUCount=listset[3]
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -313,7 +314,7 @@ class Command():
         if listset[0]=='success':
             self.reply_get_guest_cpucount(listset)
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -326,7 +327,7 @@ class Command():
                     vm.CPUExecutionCap=listset[3]
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -335,7 +336,7 @@ class Command():
             self.reply_get_guest_cpuexecutioncap(listset)
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -347,7 +348,7 @@ class Command():
                     vm.VRAMSize=listset[3]
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -356,7 +357,7 @@ class Command():
             self.reply_get_guest_vramsize(listset)
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -368,7 +369,7 @@ class Command():
                     vm.MemorySize=listset[3]
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -377,7 +378,7 @@ class Command():
             self.reply_get_guest_memsize(listset)
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -390,7 +391,7 @@ class Command():
                     vm.MemoryUsage=listset[4]
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -401,7 +402,7 @@ class Command():
                     vm.Name=listset[3]
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -412,7 +413,7 @@ class Command():
                     vm.OSTypeId=listset[3]
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -421,7 +422,7 @@ class Command():
             self.reply_get_guest_osversion(listset)
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -434,7 +435,7 @@ class Command():
                         vm.BootOrder=listset[i+3]
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -443,7 +444,7 @@ class Command():
             self.reply_get_guest_bootorder(listset)
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -467,7 +468,7 @@ class Command():
 
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -475,7 +476,7 @@ class Command():
         if listset[0]=='success':
             self.reply_get_guest_storagectrls(listset)
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -493,7 +494,7 @@ class Command():
                         if len(listset)==(i+1):
                             break
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -511,7 +512,7 @@ class Command():
                         if len(listset)==i+1:
                             break
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -530,7 +531,7 @@ class Command():
                             break
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -540,7 +541,7 @@ class Command():
                 self.host.HostNetworkAdapter.append(listset[i])
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
                 self.host.reportfailure(listset)
 
@@ -559,7 +560,7 @@ class Command():
                             break
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -570,7 +571,7 @@ class Command():
             #------------------------------
             self.get_guest_mediumattachmen(listset[2],listset[3],listset[len(listset)-1])
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -581,7 +582,7 @@ class Command():
                     self.host.VMList.remove(vm)
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -592,7 +593,7 @@ class Command():
             #------------------
             self.get_guest_list()
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -603,7 +604,7 @@ class Command():
                     vm.Description=listset[3]
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -611,7 +612,7 @@ class Command():
         if listset[0]=='success':
             self.reply_get_guest_description(listset)
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -624,7 +625,7 @@ class Command():
                         vm.PIDList.append(listset[i])
 
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 
@@ -634,7 +635,7 @@ class Command():
                 if vm.Name==listset[2]:
                     vm.PowerState=5
             if listset[len(listset)-1]=='True':
-                self.host.hostcallVcenter('','',1)
+                self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
 

@@ -124,7 +124,7 @@ class Vcenter(QMainWindow):
                     self.ui.pgbar_cpuusage.setEnabled(True)
                     self.ui.pgbar_cpuusage.setValue(int(float(h.CPUUsage)))
                     self.ui.pgbar_memusage.setEnabled(True)
-                    self.ui.pgbar_memusage.setValue(int(float(h.MemoryAvailable)/float(h.MemorySize)))
+                    self.ui.pgbar_memusage.setValue(int(float(h.MemoryAvailable)/float(h.MemorySize)*100))
                     self.ui.pgbar_diskusage.setEnabled(True)
                     self.ui.pgbar_diskusage.setValue(int(float(h.DiskUsage)))
                 else:
@@ -255,19 +255,21 @@ class Vcenter(QMainWindow):
 
 
     #传递给宿主机对象使用的函数,用于通知vcenter与当前连接的宿主机的连接状态发生改变(如已连接/已断开),或是需要立刻刷新widget面板的请求
-    def hostcallVcenter(self,IPAddr='',state='',reflash=''):
+    def hostcallVcenter(self,IPAddr='',state='',reflashtree='',reflash=''):
         print('Vcenter.hostcallVcenter')
-        print(IPAddr,state,reflash)
+        print(IPAddr,state,reflashtree,reflash)
         for i in self.Hostlist:
             if i.IPAddr==IPAddr:
                 if state==u'\x01':
                     i.isOnline=True
-                elif state==u'\x00':
+                elif state==u'':
                     i.isOnline=False
                 else:
                     pass
-        if reflash==u'\x01':
+        if reflashtree==u'\x01':
             self.treeRefrash()
+        if reflash==u'\x01':
+            self.tree_selected()
 
 
 

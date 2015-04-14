@@ -76,7 +76,7 @@ class Socket_processor(QThread): #注意继承QThread
                     self.tb(u'验证成功,已连接',self.IPAddr)
                     #发送成功连接信号
                     #self.emit(SIGNAL('set_flag(int)'),1)
-                    self.callVcenter(self.IPAddr,1,0)
+                    self.callVcenter(self.IPAddr,1,1,0)
                     self.loginflag=1
                     #开始进入业务处理函数
                     self.link_processor(self.msg_sock)
@@ -91,7 +91,7 @@ class Socket_processor(QThread): #注意继承QThread
             self.tb(u'连接断开',self.IPAddr)
 
             #发送成功断开信号
-            self.callVcenter(self.IPAddr,0,1)
+            self.callVcenter(self.IPAddr,0,1,0)
             #self.emit(SIGNAL('set_flag(int)'),2)
         except socket.error,e:
             self.tb(u'网络连接错误,请重试')
@@ -114,13 +114,14 @@ class Socket_processor(QThread): #注意继承QThread
         self.tb(u'开始与宿主机进行通讯',self.IPAddr)
         try:
             #------------------------------开启获取心跳包功能-------------------------------
-            # self.heartbeat=HeartBeat(self.append_command,self.disconnforheartbeating)
-            # self.heartbeat.start()
+            self.heartbeat=HeartBeat(self.append_command,self.disconnforheartbeating)
+            self.heartbeat.start()
             #------------------------------开启获取心跳包功能--------------------------------
             while True:#开始业务处理循环,先判断命令返回结果集列表是否有需要处理的命令,再判断命令列表时候有需要发送的命令
                 if self.disconn_flag==True: #判断是否有断开连接的信号
                         self.tb(u'正在断开连接',self.IPAddr)
                         sock.sendall('exit')
+                        self.callVcenter(self.IPAddr,0,1,0)
                         raise ServerStop()
                         break
                 #查找命令表表头是否为空,如为空,跳过此轮循环
@@ -134,6 +135,7 @@ class Socket_processor(QThread): #注意继承QThread
                         if self.disconn_flag==True: #判断是否有断开连接的信号
                             self.tb(u'正在断开连接',self.IPAddr)
                             sock.sendall('exit')
+                            self.callVcenter(self.IPAddr,0,1,0)
                             raise ServerStop()
                             break
                         recv_data=self.msg_sock.recv(4096)
@@ -145,10 +147,11 @@ class Socket_processor(QThread): #注意继承QThread
                     list=list.split('|')
                     if list[0]=='exit':
                         self.tb(u'宿主机服务被关闭,连接中断',self.IPAddr)
+                        self.callVcenter(self.IPAddr,0,1,0)
                         raise ServerStop()
-                    # elif list[0]=='heartbeating':
-                    #     self.heartbeat.inHeartBeating()
-                        #self.tb(u'收到心跳包,来自',self.IPaddr)
+                    elif list[0]=='heartbeating':
+                        self.heartbeat.inHeartBeating()
+                        self.tb(u'收到心跳包,来自',self.IPAddr)
                     else:
                         self.result_list.append(list)
                     #命令返回结果集list表头是否为空的判断

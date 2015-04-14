@@ -38,30 +38,37 @@ class Newhost(QMainWindow):
                         QMessageBox.question(self,u'提示',u'已连接该服务端')
                     else:
                         self.Password=self.ui.le_hostPWD.text()
-
                         self.host.socket_processor.set_conn(self.IPAddr,self.Password)
+                        self.host.socket_processor.reset()
                         self.host.socket_processor.start()
-                        time.sleep(1)
-                        if self.host.socket_processor.loginflag==1:
-                            self.Vcenter_HostList.append(self.host)
-                            #获取宿主机相关信息
-                            self.host.socket_processor.vb.get_host_cpu_usage()
-                            self.host.socket_processor.vb.get_host_cpuinfo()
-                            self.host.socket_processor.vb.get_host_mem_avail()
-                            self.host.socket_processor.vb.get_host_memsize()
-                            self.host.socket_processor.vb.get_host_networkadapters()
-                            self.host.socket_processor.vb.get_host_storageinfo()
-                            self.host.socket_processor.vb.get_host_osversion()
-                            #宿主机默认名称为IP地址
-                            self.host.Name=self.IPAddr
-                            self.host.IPAddr=self.IPAddr
-                            print('IP : '+self.IPAddr)
-                            self.host.socket_processor.vb.get_guest_list()
-                            self.close()
-                        elif self.host.socket_processor.loginflag==-1:
-                            QMessageBox.question(self, u'提示', u'连接密码错误')
-                        elif self.host.socket_processor.loginflag==-2:
-                            QMessageBox.question(self, u'提示',u'网络连接错误,请重试')
+                        while True:
+                            if self.host.socket_processor.loginflag==1:
+                                self.Vcenter_HostList.append(self.host)
+                                #获取宿主机相关信息
+                                self.host.socket_processor.vb.get_host_cpu_usage()
+                                self.host.socket_processor.vb.get_host_cpuinfo()
+                                self.host.socket_processor.vb.get_host_mem_avail()
+                                self.host.socket_processor.vb.get_host_memsize()
+                                self.host.socket_processor.vb.get_host_networkadapters()
+                                self.host.socket_processor.vb.get_host_storageinfo()
+                                self.host.socket_processor.vb.get_host_osversion()
+                                #宿主机默认名称为IP地址
+                                self.host.Name=self.IPAddr
+                                self.host.IPAddr=self.IPAddr
+                                print('IP : '+self.IPAddr)
+                                self.host.socket_processor.vb.get_guest_list(True)
+                                self.close()
+                                break
+
+                            elif self.host.socket_processor.loginflag==-1:
+                                QMessageBox.question(self, u'提示', u'连接密码错误')
+                                break
+                            elif self.host.socket_processor.loginflag==-2:
+                                QMessageBox.question(self, u'提示',u'网络连接错误,请重试')
+                                break
+                            else:
+                                continue
+
                 else:
                     QMessageBox.question(self, u'提示', u'IP地址有误')
              else:

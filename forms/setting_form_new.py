@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'E:\Vbox\VboxCenter\forms\setting_form.ui'
 #
-# Created: Mon Apr 13 17:01:22 2015
+# Created: Tue Apr 14 16:08:41 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -240,24 +240,20 @@ class Ui_setting_form(object):
         self.btn_cancel = QtGui.QPushButton(self.centralwidget)
         self.btn_cancel.setGeometry(QtCore.QRect(380, 430, 81, 31))
         self.btn_cancel.setObjectName(_fromUtf8("btn_cancel"))
-        self.sb_vmmemsize = QtGui.QSpinBox(self.centralwidget)
-        self.sb_vmmemsize.setGeometry(QtCore.QRect(130, 160, 51, 22))
-        self.sb_vmmemsize.setMaximum(8064)
-        self.sb_vmmemsize.setProperty("value", 256)
-        self.sb_vmmemsize.setObjectName(_fromUtf8("sb_vmmemsize"))
+        self.sb_mvmemsize = QtGui.QSpinBox(self.centralwidget)
+        self.sb_mvmemsize.setGeometry(QtCore.QRect(130, 160, 51, 22))
+        self.sb_mvmemsize.setMaximum(8064)
+        self.sb_mvmemsize.setProperty("value", 256)
+        self.sb_mvmemsize.setObjectName(_fromUtf8("sb_mvmemsize"))
         setting_form.setCentralWidget(self.centralwidget)
         self.statusbar = QtGui.QStatusBar(setting_form)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
         setting_form.setStatusBar(self.statusbar)
 
         self.retranslateUi(setting_form)
+        QtCore.QObject.connect(self.btn_cancel, QtCore.SIGNAL(_fromUtf8("clicked()")), setting_form.close)
+        QtCore.QObject.connect(self.cheakb_NAenabled, QtCore.SIGNAL(_fromUtf8("stateChanged(int)")), setting_form.slot1)
         QtCore.QMetaObject.connectSlotsByName(setting_form)
-        QtCore.QObject.connect(self.btn_MACgenerator,QtCore.SIGNAL(_fromUtf8('clicked()')),setting_form.MACGenerator)
-        QtCore.QObject.connect(self.btn_up,QtCore.SIGNAL(_fromUtf8('clicked()')),setting_form.bootorder_up)
-        QtCore.QObject.connect(self.btn_down,QtCore.SIGNAL(_fromUtf8('clicked()')),setting_form.bootorder_down)
-        QtCore.QObject.connect(self.btn_cancel,QtCore.SIGNAL(_fromUtf8("clicked()")),setting_form.close)
-        QtCore.QObject.connect(self.cheakb_NAenabled, QtCore.SIGNAL(_fromUtf8("stateChanged(int)")), setting_form.setNAwidgetEnabled)
-
 
     def retranslateUi(self, setting_form):
         setting_form.setWindowTitle(_translate("setting_form", "虚拟机设定", None))
