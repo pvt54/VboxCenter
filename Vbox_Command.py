@@ -432,7 +432,7 @@ class Command():
             for vm in self.host.VMList:
                 if vm.Name==listset[2]:
                     for i in range(0,4):
-                        vm.BootOrder=listset[i+3]
+                        vm.BootOrder[i]=listset[i+3]
 
             if listset[len(listset)-1]=='True':
                 self.host.hostcallVcenter('','',1,1)
@@ -485,14 +485,15 @@ class Command():
             for vm in self.host.VMList:
                 if vm.Name==listset[2]:
                     i=3
-                    while True:
-                        ma=[]
-                        for ii in range(0,5):
-                            ma.append(listset[i])
-                            i=i+1
-                        vm.MediumAttachment.append(ma)
-                        if len(listset)==(i+1):
-                            break
+                    if len(listset)>4:
+                        while True:
+                            ma=[]
+                            for ii in range(0,5):
+                                ma.append(listset[i])
+                                i=i+1
+                            vm.MediumAttachment.append(ma)
+                            if len(listset)==(i+1):
+                                break
             if listset[len(listset)-1]=='True':
                 self.host.hostcallVcenter('','',1,1)
         else:

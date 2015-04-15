@@ -7,12 +7,14 @@ from PyQt4.QtGui import *
 from forms.setting_form import Ui_setting_form
 
 class setting(QMainWindow):
-    def __init__(self,host,vm=None):
-        QWidget.__init__(self,parent=None)
+    def __init__(self,Vcenter,host,vm=None):
+        QWidget.__init__(self,parent=Vcenter)
+        self.Vcenter=Vcenter
         self.host=host
         self.vm=vm
         self.ui=Ui_setting_form()
         self.ui.setupUi(self)
+        self.ISOpath=None
         self.ui.cb_vmOS.addItems([u'Other',
                                  u'Other_64',
                                  u'Windows31',
@@ -102,8 +104,8 @@ class setting(QMainWindow):
         self.ui.cb_NAbridgedinterface.addItems(self.host.HostNetworkAdapter)
         if vm is not None:
             print ('加载一个已有的vm对象')
-            self.setWindowTitle('虚拟机设定')
-            self.ui.le_vmname=vm.Name
+            self.setWindowTitle(u'虚拟机设定')
+            self.ui.le_vmname.setText(vm.Name)
             self.ui.cb_vmOS.setEditable(False)
             self.ui.cb_NAadaptertype.setEditable(False)
             self.ui.cb_NAattachmentType.setEditable(False)
@@ -111,12 +113,14 @@ class setting(QMainWindow):
             self.ui.cb_vmOS.setCurrentIndex(self.ui.cb_vmOS.findText(vm.OSTypeId))
             self.ui.sb_cpucount.setValue(int(vm.CPUCount))
             self.ui.sb_cpuexecutioncap.setValue(int(vm.CPUExecutionCap))
+            self.ui.sb_vmvmemsize.setMaximum(64)
             self.ui.sb_vmvmemsize.setValue(int(vm.VRAMSize))
             self.ui.sb_vmmemsize.setMaximum(int(self.host.MemorySize)/10*6)
             self.ui.sb_vmmemsize.setValue(int(self.vm.MemorySize))
-            self.ui.tb_description.append(self.vm.Description)\
+            self.ui.te.append(self.vm.Description)
             #---------------------------加入bootordertable初始化代码--------------------------
             self.table_bootorder_refresh()
+            self.ui.lab_vmdiskname.setText(u'没有盘片')
             for med in vm.Medium:
                 if med[2]=='2':
                     self.ui.lab_vmdiskname.setText(med[0])
@@ -126,24 +130,24 @@ class setting(QMainWindow):
                 self.ui.cheakb_NAenabled.setChecked(True)
                 self.ui.wg_NA.setEnabled(True)
                 self.ui.cb_NAattachmentType.setCurrentIndex(0)
-                if (vm.NetworkAdapter[0])[6]=='3':
+                if (vm.NetworkAdapter[0])[5]=='3':
                     self.ui.cb_NAadaptertype.setCurrentIndex(self.ui.cb_NAadaptertype.findText('I82540EM'))
-                elif (vm.NetworkAdapter[0])[6]=='6':
+                elif (vm.NetworkAdapter[0])[5]=='6':
                     self.ui.cb_NAadaptertype.setCurrentIndex(self.ui.cb_NAadaptertype.findText('Virtio'))
-                elif (vm.NetworkAdapter[0])[6]=='2':
+                elif (vm.NetworkAdapter[0])[5]=='2':
                     self.ui.cb_NAadaptertype.setCurrentIndex(self.ui.cb_NAadaptertype.findText('Am79C973'))
-                elif (vm.NetworkAdapter[0])[6]=='4':
+                elif (vm.NetworkAdapter[0])[5]=='4':
                     self.ui.cb_NAadaptertype.setCurrentIndex(self.ui.cb_NAadaptertype.findText('I82543GC'))
-                elif (vm.NetworkAdapter[0])[6]=='5':
+                elif (vm.NetworkAdapter[0])[5]=='5':
                     self.ui.cb_NAadaptertype.setCurrentIndex(self.ui.cb_NAadaptertype.findText('I82545EM'))
-                self.ui.cb_NAbridgedinterface.setCurrentIndex(self.ui.cb_NAbridgedinterface.findText((vm.NetworkAdapter[0])[5]))
+                self.ui.cb_NAbridgedinterface.setCurrentIndex(self.ui.cb_NAbridgedinterface.findText((vm.NetworkAdapter[0])[4]))
                 self.ui.le_MACaddress.setText((self.vm.NetworkAdapter[0])[2])
                 self.ui.cheakb_cableconnected.setChecked(True)
             else:
                 self.ui.wg_NA.setEnabled(False)
         else:
             print('新建一个新的虚拟机')
-            self.setWindowTitle('新建虚拟机')
+            self.setWindowTitle(u'新建虚拟机')
             self.ui.cb_vmOS.setEditable(False)
             self.ui.cb_NAadaptertype.setEditable(False)
             self.ui.cb_NAattachmentType.setEditable(False)
@@ -151,6 +155,7 @@ class setting(QMainWindow):
             self.ui.sb_cpucount.setValue(1)
             self.ui.sb_cpuexecutioncap.setValue(100)
             self.ui.sb_vmvmemsize.setValue(20)
+            self.ui.sb_vmvmemsize.setMaximum(64)
             self.ui.sb_vmmemsize.setMaximum(int(self.host.MemorySize)/10*6)
             self.ui.sb_vmmemsize.setValue(256)
             #---------------------------加入bootordertable初始化代码--------------------------
@@ -174,18 +179,21 @@ class setting(QMainWindow):
 
     #刷新启动项表格,或者初始化数据
     def table_bootorder_refresh(self,New_bootorder=False):
-        if New_bootorder:
-            for i in range(0,4):
-                tableitem=QTableWidgetItem(u'硬盘')
-                self.ui.tab_bootorder.setItem(i,0,tableitem)
-                tableitem=QTableWidgetItem(u'光驱')
-                self.ui.tab_bootorder.setItem(i,0,tableitem)
-                tableitem=QTableWidgetItem(u'网络')
-                self.ui.tab_bootorder.setItem(i,0,tableitem)
-                tableitem=QTableWidgetItem(u'软驱')
-                self.ui.tab_bootorder.setItem(i,0,tableitem)
+        if New_bootorder is True:
+            print('new_bootorder start')
+            tableitem=QTableWidgetItem(u'硬盘')
+            self.ui.tab_bootorder.setItem(0,0,tableitem)
+            tableitem=QTableWidgetItem(u'光驱')
+            self.ui.tab_bootorder.setItem(1,0,tableitem)
+            tableitem=QTableWidgetItem(u'网络')
+            self.ui.tab_bootorder.setItem(2,0,tableitem)
+            tableitem=QTableWidgetItem(u'软驱')
+            self.ui.tab_bootorder.setItem(3,0,tableitem)
+            print('new_bootorder end')
         else:
-             for i in range(0,4):
+            print('self.vm.BootOrder')
+            print(self.vm.BootOrder)
+            for i in range(0,4):
                 if self.vm.BootOrder[i] =='1':
                     tableitem=QTableWidgetItem(u'软驱')
                     self.ui.tab_bootorder.setItem(i,0,tableitem)
@@ -218,8 +226,8 @@ class setting(QMainWindow):
         print ('start_up')
         if len(self.ui.tab_bootorder.selectedItems()) != 0 and (self.ui.tab_bootorder.currentRow()) is not 0:
             current_row=self.ui.tab_bootorder.currentRow()
-            current_item=QTableWidgetItem((self.ui.tableWidget.item(current_row,0)).text())
-            up_item=QTableWidgetItem((self.ui.tableWidget.item(current_row-1,0)).text())
+            current_item=QTableWidgetItem((self.ui.tab_bootorder.item(current_row,0)).text())
+            up_item=QTableWidgetItem((self.ui.tab_bootorder.item(current_row-1,0)).text())
             self.ui.tab_bootorder.takeItem(current_row,0)
             self.ui.tab_bootorder.takeItem(current_row-1,0)
             self.ui.tab_bootorder.setItem(current_row-1,0,current_item)
@@ -258,6 +266,28 @@ class setting(QMainWindow):
 
     #打开文件选择对话框函数
     def openFileselectDialog(self):
-        fileName = QFileDialog.getOpenFileName(self,self.tr('Open Image'),self.tr('ISO Files(*.ISO)'))
+        fileName = QFileDialog.getOpenFileName(self,self.tr('Open Image'),'c:',self.tr('ISO Files(*.ISO)'))
         print(fileName)
         self.ISOpath=fileName
+
+    #确认按钮对应函数
+    def confirm(self):
+        if self.vm is not None: #进行虚拟机设定的校验提交
+            #校验部分,非空检查
+            if (self.ui.le_vmname.text()) =='':
+                QMessageBox.question(self, u'提示',u'请输入虚拟机名称')
+            if (self.ui.le_MACaddress.text()) =='':
+                QMessageBox.question(self, u'提示',u'请输入MAC地址')
+            #逐个判断控件的值是否发生变化,如果有,这调用对应的值得提交修改函数
+            if (self.ui.cb_vmOS.currentText()) != self.vm.OSTypeId:
+                self.host.socket_processor.vb.set_guest_osversion(self.vm.Name,self.ui.cb_vmOS.currentText(),True)
+            if (self.ui.sb_cpucount.value()) != self.vm.CPUCount:
+                self.host.socket_processor.vb.set_guest_cpucount(self.vm.Name,self.ui.sb_cpucount.value(),True)
+            if (self.ui.sb_cpuexecutioncap.value()) != self.vm.CPUExecutionCap:
+                self.host.socket_processor.vb.get_guest_cpuexecutioncap(self.vm.Name,self.ui.sb_cpuexecutioncap.value(),True)
+            if (self.ui.sb_vmvmemsize.value()) != self.vm.CPUCount:
+                self.host.socket_processor.vb.set_guest_vramsize(self.vm.Name,self.ui.sb_vmvmemsize.value(),True)
+            if (self.ui.sb_vmmemsize.value()) != self.vm.CPUCount:
+                self.host.socket_processor.vb.set_guest_memsize(self.vm.Name,self.ui.sb_vmmemsize.value(),True)
+            if (self.ui.te.toPlainText()) != self.vm.Description:
+                self.host.socket_processor.vb.set_guest_description(self.vm.Name,self.ui.te.toPlainText(),True)

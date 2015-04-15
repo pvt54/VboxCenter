@@ -6,6 +6,7 @@ import threading
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from forms.Vcenter_Form import Ui_Vcenter_form
+from vm_setting import setting
 from Host_Class import HostInfo
 from Vm_Class import VirtualMachineInfo
 from socket_processor import Socket_processor
@@ -97,15 +98,23 @@ class Vcenter(QMainWindow):
                         self.ui.lab_vmvmemsize.setText(str(vm.VRAMSize)+'MB')
                         self.ui.lab_vmSCname.setText(str((vm.StorageControllers[0])[0]))
                         if (vm.StorageControllers[0])[1] == '2':
-                            self.ui.lab_vmSCtype.setText('SATA')
-                        for ma in vm.MediumAttachment:
-                            if ma[0]==(vm.StorageControllers[0])[0]:
-                                self.ui.lab_vmdiskname.setText(str(ma[1]))
-                            if ma[4]=='2':
-                                if ma[1] != 'None':
-                                    self.ui.lab_vmdvdname.setText(str(ma[1]))
-                                else:
-                                    self.ui.lab_vmdvdname.setText(u'没有碟片')
+                            self.ui.lab_vmSCtype.setText(u'类型:SATA')
+                        if vm.MediumAttachment != [] or vm.Medium != []:
+                            for ma in vm.MediumAttachment:
+                                if ma[0]==(vm.StorageControllers[0])[0]:
+                                    self.ui.lab_vmdiskname.setText(str(ma[1]))
+                                    for med in vm.Medium:
+                                        if med[0]==ma[1]:
+                                            self.ui.lab_vmdisksize.setText(str(int(med[4])/1000/1000))+'MB'
+                                if ma[4]=='2':
+                                    if ma[1] != 'None':
+                                        self.ui.lab_vmdvdname.setText(str(ma[1]))
+                                    else:
+                                        self.ui.lab_vmdvdname.setText(u'没有碟片')
+                        else:
+                                self.ui.lab_vmdiskname.setText(u'没有磁盘')
+                                self.ui.lab_vmdisksize.setText('0 MB')
+                                self.ui.lab_vmdvdname.setText(u'没有碟片')
                         for m in vm.Medium:
                             if m[0]==str(self.ui.lab_vmdiskname.text()):
                                 if float(m[3])/1024.0/1024.0/1024.0 > 0:
@@ -162,14 +171,14 @@ class Vcenter(QMainWindow):
             self.widgetvmReflash((item[0].parent()).text(0),item[0].text(0))
             self.ui.widget_vm.show()
             self.ui.widget_host.hide()
-            return (item[0].text(0),item[0].text(1),False)
+            return (item[0].text(0),item[0].text(1),(item[0].parent()).text(0))
 
     #treeWidget右键菜单,自适应右键对象为Host项目与Vm项目
     def treeWidget_contextmenu(self):
         print ('1')
         item_name,item_state,isHost=self.tree_selected()
         popMenu = QMenu()
-        if isHost:#如果右键的项目为一个host
+        if isHost is True:#如果右键的项目为一个host
             if item_state==u'已连接':#判断host状态 (已连接/离线)
                 disconn_action=QAction(u'断开', self)
                 self.connect(disconn_action,SIGNAL('triggered()'),self.disconnect_host)#信号设置:使用self的connect函数进行设定,信号发送者为对应的QAction对象,信号名称为triggered
@@ -179,7 +188,7 @@ class Vcenter(QMainWindow):
                 self.connect(conn_action,SIGNAL('triggered()'),self.connect_host)
                 popMenu.addAction((conn_action))
             new_action=QAction(u'新建虚拟机', self)
-            self.connect(new_action,SIGNAL('triggered()'),self.fun1)
+            self.connect(new_action,SIGNAL('triggered()'),self.vmsetting)
             popMenu.addAction(new_action)
             rename_action=QAction(u'重命名', self)
             self.connect(rename_action,SIGNAL('triggered()'),self.rename_host)
@@ -199,6 +208,9 @@ class Vcenter(QMainWindow):
             rename_action=QAction(u'重命名', self)
             self.connect(rename_action,SIGNAL('triggered()'),self.fun1)
             popMenu.addAction(rename_action)
+            setting_action=QAction(u'设定',self)
+            self.connect(setting_action,SIGNAL('triggered()'),self.vmsetting)
+            popMenu.addAction(setting_action)
             del_action=QAction(u'删除', self)
             self.connect(del_action,SIGNAL('triggered()'),self.fun1)
             popMenu.addAction(del_action)
@@ -244,6 +256,35 @@ class Vcenter(QMainWindow):
                 h.socket_processor.disconn()
                 self.Hostlist.remove(h)
         self.treeRefrash()
+
+    #新建虚拟机/设定虚拟机
+    def vmsetting(self):
+        name,state,isHost=self.tree_selected()
+        if isHost is True:
+            #新建一个新的虚拟机
+            # print('new virtualmachine')
+            if state== u'未连接':
+                QMessageBox.question(self, u'提示',u'该服务端未连接')
+            else:
+                for host in self.Hostlist:
+                    if host.Name == name:
+                        newvm=setting(self,host)
+                        newvm.show()
+                        newvm.exec_()
+        else:
+            #打开一个虚拟机的设定窗口
+            if state==u'已连接':
+                QMessageBox.question(self, u'提示',u'虚拟机正在运行,无法设定.')
+            else:
+                for host in self.Hostlist:
+                    if host.Name == isHost:
+                        for vm in host.VMList:
+                            if vm.Name == name:
+                                vmsetting=setting(self,host,vm)
+                                vmsetting.show()
+                                vmsetting.exec_()
+
+
 
     #当vbox命令执行失败时,弹出对话框显示出错内容(传递至HostInfo对象中使用)
     def reportfailure(self,failureMSG):
