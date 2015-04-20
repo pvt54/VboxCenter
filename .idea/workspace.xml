@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/Vbox_Command.py" line="570" />
-    <bookmark url="file://$PROJECT_DIR$/Vbox_Command.py" line="591" />
+    <bookmark url="file://$PROJECT_DIR$/Vbox_Command.py" line="581" />
+    <bookmark url="file://$PROJECT_DIR$/Vbox_Command.py" line="602" />
     <bookmark url="file://$PROJECT_DIR$/Vbox_Command.py" line="97" />
     <bookmark url="file://$PROJECT_DIR$/../vboxserver/VboxCtrl.py" line="675" />
-    <bookmark url="file://$PROJECT_DIR$/vm_setting.py" line="120" />
-    <bookmark url="file://$PROJECT_DIR$/vm_setting.py" line="160" />
+    <bookmark url="file://$PROJECT_DIR$/vm_setting.py" line="123" />
+    <bookmark url="file://$PROJECT_DIR$/vm_setting.py" line="173" />
+    <bookmark url="file://$PROJECT_DIR$/vm_setting.py" line="375" />
+    <bookmark url="file://$PROJECT_DIR$/vm_setting.py" line="388" />
+    <bookmark url="file://$PROJECT_DIR$/Vcenter.py" line="176" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="96722d7e-37f1-4441-91fb-d6eb110f9634" name="Default" comment="" />
@@ -22,11 +25,12 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/VboxCenter$PyQT4_TestForm.coverage" NAME="PyQT4_TestForm Coverage Results" MODIFIED="1426235281566" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PyQT4_test/PyQT4_TestForm" />
     <SUITE FILE_PATH="coverage/VboxCenter$test1.coverage" NAME="test1 Coverage Results" MODIFIED="1418780858478" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/VboxCenter$Main_server_form.coverage" NAME="Main_server_form Coverage Results" MODIFIED="1429085269368" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../vboxserver" />
-    <SUITE FILE_PATH="coverage/VboxCenter$PyQT4_test.coverage" NAME="PyQT4_test Coverage Results" MODIFIED="1429087863403" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PyQT4_test/PyQT4_TestForm" />
+    <SUITE FILE_PATH="coverage/VboxCenter$vm_setting.coverage" NAME="vm_setting Coverage Results" MODIFIED="1429498088050" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/VboxCenter$Main_server_form.coverage" NAME="Main_server_form Coverage Results" MODIFIED="1429518087458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../vboxserver" />
+    <SUITE FILE_PATH="coverage/VboxCenter$PyQT4_test.coverage" NAME="PyQT4_test Coverage Results" MODIFIED="1429498083685" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PyQT4_test/PyQT4_TestForm" />
     <SUITE FILE_PATH="coverage/VboxCenter$vcenter_dialog.coverage" NAME="vcenter_dialog Coverage Results" MODIFIED="1426835633256" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/VboxCenter$Dialog.coverage" NAME="Dialog Coverage Results" MODIFIED="1418782940126" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_eric4project" />
-    <SUITE FILE_PATH="coverage/VboxCenter$Vcenter.coverage" NAME="Vcenter Coverage Results" MODIFIED="1429090195869" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/VboxCenter$Vcenter.coverage" NAME="Vcenter Coverage Results" MODIFIED="1429519594052" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -39,41 +43,41 @@
       <content type="file-editors">
         <state>
           <leaf>
-            <file leaf-file-name="Host_Class.py" pinned="false" current="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/Host_Class.py">
+            <file leaf-file-name="socket_processor.py" pinned="false" current="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/socket_processor.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1596">
-                    <caret line="15" column="29" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="29" />
+                  <state vertical-scroll-proportion="0.0" vertical-offset="1292" max-vertical-offset="3439">
+                    <caret line="68" column="40" selection-start-line="68" selection-start-column="40" selection-end-line="68" selection-end-column="40" />
                     <folding />
                   </state>
                 </provider>
               </entry>
             </file>
-            <file leaf-file-name="VboxCtrl.py" pinned="false" current="false" current-in-tab="false">
+            <file leaf-file-name="Vm_Class.py" pinned="false" current="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/Vm_Class.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state vertical-scroll-proportion="0.0" vertical-offset="589" max-vertical-offset="1406">
+                    <caret line="31" column="32" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
+                    <folding />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file leaf-file-name="VboxCtrl.py" pinned="false" current="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/../vboxserver/VboxCtrl.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.0" vertical-offset="7819" max-vertical-offset="17442">
-                    <caret line="447" column="29" selection-start-line="447" selection-start-column="9" selection-end-line="447" selection-end-column="29" />
+                  <state vertical-scroll-proportion="0.0" vertical-offset="12939" max-vertical-offset="17442">
+                    <caret line="690" column="25" selection-start-line="690" selection-start-column="25" selection-end-line="690" selection-end-column="25" />
                     <folding />
                   </state>
                 </provider>
               </entry>
             </file>
-            <file leaf-file-name="PyQT4_test.py" pinned="false" current="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/../PyQT4_test/PyQT4_TestForm/PyQT4_test.py">
+            <file leaf-file-name="Main_server_processor.py" pinned="false" current="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/../vboxserver/Main_server_processor.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.0" vertical-offset="513" max-vertical-offset="3097">
-                    <caret line="74" column="41" selection-start-line="74" selection-start-column="41" selection-end-line="74" selection-end-column="41" />
-                    <folding />
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file leaf-file-name="Vbox_Command.py" pinned="false" current="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/Vbox_Command.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="-0.7057522" vertical-offset="1873" max-vertical-offset="13281">
-                    <caret line="65" column="25" selection-start-line="65" selection-start-column="8" selection-end-line="65" selection-end-column="25" />
+                  <state vertical-scroll-proportion="0.0" vertical-offset="3534" max-vertical-offset="4503">
+                    <caret line="186" column="47" selection-start-line="186" selection-start-column="38" selection-end-line="186" selection-end-column="47" />
                     <folding />
                   </state>
                 </provider>
@@ -87,31 +91,31 @@
       <content type="file-editors">
         <state>
           <leaf>
-            <file leaf-file-name="socket_processor.py" pinned="false" current="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/socket_processor.py">
+            <file leaf-file-name="Host_Class.py" pinned="false" current="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/Host_Class.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3363">
-                    <caret line="39" column="22" selection-start-line="39" selection-start-column="8" selection-end-line="39" selection-end-column="22" />
+                  <state vertical-scroll-proportion="0.8196903" vertical-offset="456" max-vertical-offset="1596">
+                    <caret line="66" column="13" selection-start-line="66" selection-start-column="13" selection-end-line="66" selection-end-column="13" />
                     <folding />
                   </state>
                 </provider>
               </entry>
             </file>
-            <file leaf-file-name="newhost.py" pinned="false" current="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/newhost.py">
+            <file leaf-file-name="PyQT4_test.py" pinned="false" current="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/../PyQT4_test/PyQT4_TestForm/PyQT4_test.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.0" vertical-offset="692" max-vertical-offset="1634">
-                    <caret line="71" column="17" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="17" />
+                  <state vertical-scroll-proportion="0.0" vertical-offset="2128" max-vertical-offset="3154">
+                    <caret line="112" column="56" selection-start-line="112" selection-start-column="56" selection-end-line="112" selection-end-column="56" />
                     <folding />
                   </state>
                 </provider>
               </entry>
             </file>
-            <file leaf-file-name="Vm_Class.py" pinned="false" current="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/Vm_Class.py">
+            <file leaf-file-name="Vbox_Command.py" pinned="false" current="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/Vbox_Command.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.20132743" vertical-offset="198" max-vertical-offset="1444">
-                    <caret line="20" column="19" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="19" />
+                  <state vertical-scroll-proportion="0.0" vertical-offset="114" max-vertical-offset="13490">
+                    <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
                     <folding />
                   </state>
                 </provider>
@@ -128,21 +132,43 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Vcenter.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Vcenter.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Vcenter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-13.76" vertical-offset="5223" max-vertical-offset="6289">
-              <caret line="293" column="46" selection-start-line="293" selection-start-column="29" selection-end-line="293" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.6051188" vertical-offset="3013" max-vertical-offset="6403">
+              <caret line="176" column="4" selection-start-line="176" selection-start-column="4" selection-end-line="176" selection-end-column="4" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="vm_setting.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="newhost.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/newhost.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="236" max-vertical-offset="1691">
+              <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="vm_setting.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vm_setting.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3376147" vertical-offset="5079" max-vertical-offset="5662">
-              <caret line="277" column="61" selection-start-line="277" selection-start-column="61" selection-end-line="277" selection-end-column="61" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="3234" max-vertical-offset="5871">
+              <caret line="183" column="0" selection-start-line="183" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
+              <folding>
+                <element signature="e#14270#22565#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Vcenter_Form.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/forms/Vcenter_Form.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="7300" max-vertical-offset="8626">
+              <caret line="400" column="8" selection-start-line="400" selection-start-column="8" selection-end-line="400" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -151,8 +177,8 @@
       <file leaf-file-name="setting_form.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/forms/setting_form.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1976" max-vertical-offset="5662">
-              <caret line="122" column="56" selection-start-line="122" selection-start-column="56" selection-end-line="122" selection-end-column="56" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="5078" max-vertical-offset="6308">
+              <caret line="293" column="107" selection-start-line="293" selection-start-column="107" selection-end-line="293" selection-end-column="107" />
               <folding />
             </state>
           </provider>
@@ -179,18 +205,18 @@
         <option value="$PROJECT_DIR$/forms/setting.py" />
         <option value="$PROJECT_DIR$/vcenter_dialog.py" />
         <option value="$PROJECT_DIR$/Vcenter_Command.py" />
-        <option value="$PROJECT_DIR$/forms/Vcenter_Form.py" />
         <option value="$PROJECT_DIR$/forms/newhost_form.py" />
-        <option value="$PROJECT_DIR$/../vboxserver/VboxCtrl.py" />
-        <option value="$PROJECT_DIR$/Host_Class.py" />
         <option value="$PROJECT_DIR$/socket_processor.py" />
-        <option value="$PROJECT_DIR$/newhost.py" />
-        <option value="$PROJECT_DIR$/Vm_Class.py" />
         <option value="$PROJECT_DIR$/../PyQT4_test/PyQT4_TestForm/PyQT4_test.py" />
-        <option value="$PROJECT_DIR$/Vcenter.py" />
+        <option value="$PROJECT_DIR$/Vm_Class.py" />
+        <option value="$PROJECT_DIR$/../vboxserver/VboxCtrl.py" />
         <option value="$PROJECT_DIR$/Vbox_Command.py" />
+        <option value="$PROJECT_DIR$/newhost.py" />
+        <option value="$PROJECT_DIR$/Host_Class.py" />
         <option value="$PROJECT_DIR$/forms/setting_form.py" />
+        <option value="$PROJECT_DIR$/forms/Vcenter_Form.py" />
         <option value="$PROJECT_DIR$/vm_setting.py" />
+        <option value="$PROJECT_DIR$/Vcenter.py" />
       </list>
     </option>
   </component>
@@ -263,6 +289,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VboxCenter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VboxCenter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="forms" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -284,7 +324,7 @@
       <console-settings />
     </option>
   </component>
-  <component name="RunManager" selected="Python.Vcenter">
+  <component name="RunManager" selected="Python.Main_server_form">
     <configuration default="false" name="vcenter_dialog" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -367,20 +407,20 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="PyQT4_TestForm" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="vm_setting" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../PyQT4_test/PyQT4_TestForm" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="PyQT4_TestForm" />
+      <module name="VboxCenter" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../PyQT4_test/PyQT4_TestForm/PyQT4_TestForm.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/vm_setting.py" />
       <option name="PARAMETERS" value="" />
       <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
@@ -561,15 +601,15 @@
       <item index="2" class="java.lang.String" itemvalue="Python.Main_server_form" />
       <item index="3" class="java.lang.String" itemvalue="Python.Vcenter" />
       <item index="4" class="java.lang.String" itemvalue="Python.PyQT4_test" />
-      <item index="5" class="java.lang.String" itemvalue="Python.PyQT4_TestForm" />
+      <item index="5" class="java.lang.String" itemvalue="Python.vm_setting" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.Vcenter" />
-        <item index="1" class="java.lang.String" itemvalue="Python.PyQT4_test" />
-        <item index="2" class="java.lang.String" itemvalue="Python.Main_server_form" />
-        <item index="3" class="java.lang.String" itemvalue="Python.vcenter_dialog" />
-        <item index="4" class="java.lang.String" itemvalue="Python.PyQT4_TestForm" />
+        <item index="1" class="java.lang.String" itemvalue="Python.Main_server_form" />
+        <item index="2" class="java.lang.String" itemvalue="Python.vm_setting" />
+        <item index="3" class="java.lang.String" itemvalue="Python.PyQT4_test" />
+        <item index="4" class="java.lang.String" itemvalue="Python.vcenter_dialog" />
       </list>
     </recent_temporary>
   </component>
@@ -615,10 +655,10 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24821684" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32952926" sideWeight="0.49917355" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.353914" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35281146" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12947068" sideWeight="0.5008264" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296582" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35501653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36163175" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -670,17 +710,10 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="27" />
+      <option name="time" value="33" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../PyQT4_test/PyQT4_TestForm/PyQT4_TestForm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1634" max-vertical-offset="1976">
-          <caret line="86" column="104" selection-start-line="86" selection-start-column="43" selection-end-line="86" selection-end-column="104" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Host_Class.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="266" max-vertical-offset="1159">
@@ -920,14 +953,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/forms/Vcenter_Form.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.0818915" vertical-offset="0" max-vertical-offset="8607">
-          <caret line="95" column="62" selection-start-line="95" selection-start-column="62" selection-end-line="95" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../vboxserver/Main_server_form.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="242" max-vertical-offset="3933">
@@ -939,7 +964,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.044289045" vertical-offset="0" max-vertical-offset="858">
           <caret line="2" column="14" selection-start-line="2" selection-start-column="5" selection-end-line="2" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -947,31 +971,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.28047338" vertical-offset="1036" max-vertical-offset="1881">
           <caret line="67" column="29" selection-start-line="67" selection-start-column="29" selection-end-line="67" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../vboxserver/Main_server_processor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1965" max-vertical-offset="4503">
-          <caret line="188" column="39" selection-start-line="188" selection-start-column="39" selection-end-line="188" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/newhost.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="692" max-vertical-offset="1634">
-          <caret line="71" column="17" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../PyQT4_test/PyQT4_TestForm/PyQT4_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="513" max-vertical-offset="3097">
-          <caret line="74" column="41" selection-start-line="74" selection-start-column="41" selection-end-line="74" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -979,70 +978,110 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.50183153" vertical-offset="733" max-vertical-offset="1976">
           <caret line="53" column="8" selection-start-line="53" selection-start-column="8" selection-end-line="53" selection-end-column="65" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Host_Class.py">
+    <entry file="file://$USER_HOME$/.PyCharm30/system/python_stubs/1494736245/PyQt4/QtGui/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1596">
-          <caret line="15" column="29" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="29" />
+        <state vertical-scroll-proportion="-0.050200805" vertical-offset="25" max-vertical-offset="9082">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../vboxserver/Main_server_processor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2877" max-vertical-offset="4503">
+          <caret line="186" column="47" selection-start-line="186" selection-start-column="38" selection-end-line="186" selection-end-column="47" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/socket_processor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3363">
-          <caret line="39" column="22" selection-start-line="39" selection-start-column="8" selection-end-line="39" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Vcenter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.76" vertical-offset="5223" max-vertical-offset="6289">
-          <caret line="293" column="46" selection-start-line="293" selection-start-column="29" selection-end-line="293" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="665" max-vertical-offset="3363">
+          <caret line="68" column="40" selection-start-line="68" selection-start-column="40" selection-end-line="68" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Vm_Class.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20132743" vertical-offset="198" max-vertical-offset="1444">
-          <caret line="20" column="19" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="19" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="239" max-vertical-offset="1406">
+          <caret line="31" column="32" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/forms/setting_form.py">
+    <entry file="file://$PROJECT_DIR$/../PyQT4_test/PyQT4_TestForm/PyQT4_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1976" max-vertical-offset="5662">
-          <caret line="122" column="56" selection-start-line="122" selection-start-column="56" selection-end-line="122" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../vboxserver/VboxCtrl.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="7819" max-vertical-offset="17442">
-          <caret line="447" column="29" selection-start-line="447" selection-start-column="9" selection-end-line="447" selection-end-column="29" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1501" max-vertical-offset="3097">
+          <caret line="112" column="56" selection-start-line="112" selection-start-column="56" selection-end-line="112" selection-end-column="56" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Vbox_Command.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.7057522" vertical-offset="1873" max-vertical-offset="13281">
-          <caret line="65" column="25" selection-start-line="65" selection-start-column="8" selection-end-line="65" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="114" max-vertical-offset="13490">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../vboxserver/VboxCtrl.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="13110" max-vertical-offset="17613">
+          <caret line="690" column="25" selection-start-line="690" selection-start-column="25" selection-end-line="690" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Host_Class.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8196903" vertical-offset="456" max-vertical-offset="1596">
+          <caret line="66" column="13" selection-start-line="66" selection-start-column="13" selection-end-line="66" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/newhost.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="236" max-vertical-offset="1691">
+          <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/forms/setting_form.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="5078" max-vertical-offset="6308">
+          <caret line="293" column="107" selection-start-line="293" selection-start-column="107" selection-end-line="293" selection-end-column="107" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/forms/Vcenter_Form.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="7300" max-vertical-offset="8626">
+          <caret line="400" column="8" selection-start-line="400" selection-start-column="8" selection-end-line="400" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/vm_setting.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3376147" vertical-offset="5079" max-vertical-offset="5662">
-          <caret line="277" column="61" selection-start-line="277" selection-start-column="61" selection-end-line="277" selection-end-column="61" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="3234" max-vertical-offset="5871">
+          <caret line="183" column="0" selection-start-line="183" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
+          <folding>
+            <element signature="e#14270#22565#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Vcenter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6051188" vertical-offset="3013" max-vertical-offset="6403">
+          <caret line="176" column="4" selection-start-line="176" selection-start-column="4" selection-end-line="176" selection-end-column="4" />
           <folding />
         </state>
       </provider>

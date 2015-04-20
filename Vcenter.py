@@ -61,6 +61,9 @@ class Vcenter(QMainWindow):
                             child.setText(1,u'停止')
                         elif ii.PowerState == '5':
                             child.setText((1,u'运行中'))
+        else:
+            self.ui.widget_host.hide()
+            self.ui.widget_vm.hide()
         if (self.ui.treeWidget.topLevelItemCount())>0:
             (self.ui.treeWidget.topLevelItem(0)).setSelected(True)
             print('setSelected')
@@ -102,25 +105,23 @@ class Vcenter(QMainWindow):
                         if vm.MediumAttachment != [] or vm.Medium != []:
                             for ma in vm.MediumAttachment:
                                 if ma[0]==(vm.StorageControllers[0])[0]:
-                                    self.ui.lab_vmdiskname.setText(str(ma[1]))
-                                    for med in vm.Medium:
-                                        if med[0]==ma[1]:
-                                            self.ui.lab_vmdisksize.setText(str(int(med[4])/1000/1000))+'MB'
-                                if ma[4]=='2':
-                                    if ma[1] != 'None':
-                                        self.ui.lab_vmdvdname.setText(str(ma[1]))
-                                    else:
-                                        self.ui.lab_vmdvdname.setText(u'没有碟片')
+                                    if ma[4]=='3':
+                                        self.ui.lab_vmdiskname.setText(str(ma[1]))
+                                        for m in vm.Medium:
+                                            if m[0]==str(self.ui.lab_vmdiskname.text()):
+                                                if float(m[3])/1024.0/1024.0/1024.0 > 1:
+                                                    self.ui.lab_vmdisksize.setText(str(int(float(m[3])/1024.0/1024.0/1024.0))+'GB')
+                                                else:
+                                                    self.ui.lab_vmdisksize.setText(u'已使用'+str(int(float(m[3])/1024.0/1024.0))+'MB')
+                                    if ma[4]=='2':
+                                        if ma[1] != 'None':
+                                            self.ui.lab_vmdvdname.setText(str(ma[1]))
+                                        else:
+                                            self.ui.lab_vmdvdname.setText(u'没有碟片')
                         else:
-                                self.ui.lab_vmdiskname.setText(u'没有磁盘')
-                                self.ui.lab_vmdisksize.setText('0 MB')
-                                self.ui.lab_vmdvdname.setText(u'没有碟片')
-                        for m in vm.Medium:
-                            if m[0]==str(self.ui.lab_vmdiskname.text()):
-                                if float(m[3])/1024.0/1024.0/1024.0 > 0:
-                                    self.ui.lab_vmdisksize.setText(str(float(m[3])/1024.0/1024.0/1024.0)+'GB')
-                                else:
-                                    self.ui.lab_vmdisksize.setText(str(float(m[3])/1024.0/1024.0/1024.0)+'MB')
+                            self.ui.lab_vmdiskname.setText(u'没有磁盘')
+                            self.ui.lab_vmdisksize.setText('0 MB')
+                            self.ui.lab_vmdvdname.setText(u'没有碟片')
                         self.ui.lab_vmNA1name.setText(str((vm.NetworkAdapter[0])[4]))
 
     #刷新Widght_host显示数据函数
@@ -150,11 +151,11 @@ class Vcenter(QMainWindow):
                 self.ui.lab_cpuinfo.setText(str(h.CPUInfo))
                 self.ui.lab_memsize.setText(str(h.MemorySize))
                 if float(h.VboxTotalSize) >(1024*1024):  #文件夹大小过GB
-                    self.ui.lab_totalsize.setText(str(float(h.VboxTotalSize)/1024.0/1024.0)+u'GB')
+                    self.ui.lab_totalsize.setText(str(int(float(h.VboxTotalSize)/1024.0/1024.0))+u'GB')
                 elif float(h.VboxTotalSize) >1024:  #文件夹大小过MB
-                    self.ui.lab_totalsize.setText(str(float(h.VboxTotalSize)/1024.0)+u'MB')
+                    self.ui.lab_totalsize.setText(str(int(float(h.VboxTotalSize)/1024.0))+u'MB')
                 else:  #文件夹大小只过KB
-                    self.ui.lab_totalsize.setText(str(float(h.VboxTotalSize))+u'KB')
+                    self.ui.lab_totalsize.setText(str(int(h.VboxTotalSize))+u'KB')
 
 
 
@@ -172,6 +173,11 @@ class Vcenter(QMainWindow):
             self.ui.widget_vm.show()
             self.ui.widget_host.hide()
             return (item[0].text(0),item[0].text(1),(item[0].parent()).text(0))
+
+    def vmpowerstate(self):
+        if (self.ui.btn_vmpowerstate.text())== u'启动':
+
+
 
     #treeWidget右键菜单,自适应右键对象为Host项目与Vm项目
     def treeWidget_contextmenu(self):
@@ -223,7 +229,6 @@ class Vcenter(QMainWindow):
     #连接新的宿主机
     def connectnewhost(self):
         newhostForm=Newhost(self)
-        newhostForm.Vcenter_HostList=self.Hostlist
         #newhostForm.passit(self.hostcallVcenter,self.reportfailure)
         newhostForm.show()
         newhostForm.exec_()
@@ -251,10 +256,11 @@ class Vcenter(QMainWindow):
     #删除宿主机
     def delete_host(self):
         hostname,hoststate,NA=self.tree_selected()
-        for h in self.Hostlist:
-            if h.Name==hostname:
-                h.socket_processor.disconn()
-                self.Hostlist.remove(h)
+        for i in range(0,len(self.Hostlist)):
+            if self.Hostlist[i].Name==hostname:
+                self.Hostlist[i].socket_processor.disconn()
+                del self.Hostlist[i]
+
         self.treeRefrash()
 
     #新建虚拟机/设定虚拟机

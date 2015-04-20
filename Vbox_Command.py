@@ -40,7 +40,7 @@ class Command():
         self.host.socket_processor.append_command(command)
 
     def set_guest_cpucount(self,VMName,CPUCount,reflash=False):
-        command='set_guest_cpucount|'+VMName+'|'+CPUCount+'|'+str(reflash)
+        command='set_guest_cpucount|'+VMName+'|'+str(CPUCount)+'|'+str(reflash)
         self.host.socket_processor.append_command(command)
 
     def get_guest_cpuexecutioncap(self,VMName,reflash=False):
@@ -56,7 +56,7 @@ class Command():
         self.host.socket_processor.append_command(command)
 
     def set_guest_vramsize(self,VMName,VRAMSize,reflash=False):
-        command='SET_GUEST_VRAMSIZE|'+VMName+'|'+VRAMSize+'|'+str(reflash)
+        command='SET_GUEST_VRAMSIZE|'+VMName+'|'+str(VRAMSize)+'|'+str(reflash)
         self.host.socket_processor.append_command(command)
 
     def get_guest_memsize(self,VMName,reflash=False):
@@ -64,7 +64,7 @@ class Command():
         self.host.socket_processor.append_command(command)
 
     def set_guest_memsize(self,VMName,MEMSize,reflash=False):
-        command='SET_GUEST_MEMSIZE|'+VMName+'|'+MEMSize+'|'+str(reflash)
+        command='SET_GUEST_MEMSIZE|'+VMName+'|'+str(MEMSize)+'|'+str(reflash)
         self.host.socket_processor.append_command(command)
 
     def get_guest_performance(self,VMName,reflash=False):
@@ -133,7 +133,7 @@ class Command():
         self.host.socket_processor.append_command(command)
 
     def create_new_machine(self,VMName,Description,GuestOSTypes,MemSize,VRAMSize,VdiskName,VdiskSize,reflash=False):
-        command='CREATE_NEW_MACHINE|'+VMName+'|'+Description+'|'+GuestOSTypes+'|'+MemSize+'|'+VRAMSize+'|'+VdiskName+'|'+VdiskSize+'|'+str(reflash)
+        command='CREATE_NEW_MACHINE|'+VMName+'|'+Description+'|'+GuestOSTypes+'|'+str(MemSize)+'|'+str(VRAMSize)+'|'+VdiskName+'|'+str(VdiskSize)+'|'+str(reflash)
         self.host.socket_processor.append_command(command)
 
     def get_guest_description(self,VMName,reflash=False):
@@ -159,6 +159,13 @@ class Command():
         command=command+'|'+str(reflash)
         self.host.socket_processor.append_command(command)
 
+    def ftp_on(self):
+        command='ftp_start'
+        self.host.socket_processor.append_command(command)
+
+    def ftp_off(self):
+        command='ftp_close'
+        self.host.socket_processor.append_command(command)
 
 
     def get_guest_list(self,reflash=False):#该函数在获取所有虚拟机名称的列表
@@ -536,6 +543,10 @@ class Command():
         else:
             self.host.reportfailure(listset)
 
+    def reply_set_guest_networkadapters(self,listset):
+        self.reply_get_guest_networkadapters(listset)
+
+
     def reply_get_host_networkadapters(self,listset):
         if listset[0]=='success':
             for i in range(2,len(listset)):
@@ -672,7 +683,7 @@ class Command():
         # 'SET_GUEST_MEDIUMS':set_guest_mediums,(待定)
         'GET_GUEST_MEDIUMS':reply_get_guest_mediums,
         'GET_GUEST_NETWORKADAPTERS':reply_get_guest_networkadapters,
-        # 'SET_GUEST_NETWORKADAPTERS':reply_set_guest_networkadapters,
+        'SET_GUEST_NETWORKADAPTERS':reply_set_guest_networkadapters,
         'GET_HOST_NETWORKADAPTERS':reply_get_host_networkadapters,
         'GET_GUEST_SHAREDFOLDERS':reply_get_guest_sharedfolders,
         # 'ADD_GUEST_SHAREDFOLDERS':add_guest_sharedfolders,(待定)

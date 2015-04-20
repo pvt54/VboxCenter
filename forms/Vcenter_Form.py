@@ -327,7 +327,7 @@ class Ui_Vcenter_form(object):
         self.lab_vmdiskname.setFont(font)
         self.lab_vmdiskname.setObjectName(_fromUtf8("lab_vmdiskname"))
         self.lab_vmdisksize = QtGui.QLabel(self.widget_vm)
-        self.lab_vmdisksize.setGeometry(QtCore.QRect(480, 320, 61, 21))
+        self.lab_vmdisksize.setGeometry(QtCore.QRect(480, 320, 91, 21))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Calibri"))
         font.setPointSize(10)
@@ -398,6 +398,7 @@ class Ui_Vcenter_form(object):
         #添加treeWidget的右键菜单
         self.treeWidget.customContextMenuRequested[QtCore.QPoint].connect(Vcenter_form.treeWidget_contextmenu)
         QtCore.QObject.connect(self.action, QtCore.SIGNAL(_fromUtf8("triggered()")), Vcenter_form.connectnewhost)
+        QtCore.QObject.connect(self.btn_vmpowerstate, QtCore.SIGNAL(_fromUtf8("clicked()")), Vcenter_form.vmpowerstate)
 
     def retranslateUi(self, Vcenter_form):
         Vcenter_form.setWindowTitle(_translate("Vcenter_form", "VirtualBox虚拟机管理中心", None))

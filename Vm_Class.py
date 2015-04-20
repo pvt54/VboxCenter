@@ -67,4 +67,3 @@ class VirtualMachineInfo():
 
     #虚拟机PID列表,用于存储虚拟机运行后产生的进程的PID号
     PIDList=[]
-

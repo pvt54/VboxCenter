@@ -19,8 +19,11 @@ class Newhost(QMainWindow):
         self.IPAddr=None
         self.Password=None
         #通过Vcenter实例化Hewhost对象后将Vcenter的HostList引用过来进行本地的操作
-        self.Vcenter_HostList=[]
+        self.Vcenter=Vcenter
         self.host=HostInfo(Vcenter)
+        print('host.VMList')
+        print(self.host.VMList)
+        print(id(self.host))
 
      #连接按钮对应函数
      def connectHost(self):
@@ -31,7 +34,7 @@ class Newhost(QMainWindow):
                     self.IPAddr=self.ui.le_hostIPAddr.text()
                     #通过查询IP验证此服务端是否已被连接
                     hostflag=False
-                    for i in self.Vcenter_HostList:
+                    for i in self.Vcenter.Hostlist:
                         if i.IPAddr==self.IPAddr:
                             hostflag=True
                     if hostflag:
@@ -43,7 +46,7 @@ class Newhost(QMainWindow):
                         self.host.socket_processor.start()
                         while True:
                             if self.host.socket_processor.loginflag==1:
-                                self.Vcenter_HostList.append(self.host)
+                                self.Vcenter.Hostlist.append(self.host)
                                 #获取宿主机相关信息
                                 self.host.socket_processor.vb.get_host_cpu_usage()
                                 self.host.socket_processor.vb.get_host_cpuinfo()

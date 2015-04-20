@@ -1,7 +1,10 @@
 # -*- coding: utf8 -*-
 __author__ = '54'
-import sys,random,win32ui
+import sys,random,os
+from ftplib import FTP
 sys.path.append('forms')
+reload(sys)
+sys.setdefaultencoding('utf8')
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from forms.setting_form import Ui_setting_form
@@ -117,7 +120,7 @@ class setting(QMainWindow):
             self.ui.sb_vmvmemsize.setValue(int(vm.VRAMSize))
             self.ui.sb_vmmemsize.setMaximum(int(self.host.MemorySize)/10*6)
             self.ui.sb_vmmemsize.setValue(int(self.vm.MemorySize))
-            self.ui.te.append(self.vm.Description)
+            self.ui.te.appendPlainText(self.vm.Description)
             #---------------------------加入bootordertable初始化代码--------------------------
             self.table_bootorder_refresh()
             self.ui.lab_vmdiskname.setText(u'没有盘片')
@@ -126,6 +129,16 @@ class setting(QMainWindow):
                     self.ui.lab_vmdiskname.setText(med[0])
                 else:
                     self.ui.lab_vmdiskname.setText(u'没有盘片')
+                if med[2]=='3':
+                    self.ui.le_vdiname.setText(med[0])
+                    self.ui.le_vdiname.setEnabled(False)
+                    self.ui.sb_vdisize.setValue(int(float(med[4])/1000/1000))
+                    self.ui.sb_vdisize.setEnabled(False)
+                else:
+                    self.ui.le_vdiname.setText(u'')
+                    self.ui.le_vdiname.setEnabled(False)
+                    self.ui.sb_vdisize.setValue(0)
+                    self.ui.sb_vdisize.setEnabled(False)
             if (vm.NetworkAdapter[0])[1]=='1':
                 self.ui.cheakb_NAenabled.setChecked(True)
                 self.ui.wg_NA.setEnabled(True)
@@ -160,6 +173,7 @@ class setting(QMainWindow):
             self.ui.sb_vmmemsize.setValue(256)
             #---------------------------加入bootordertable初始化代码--------------------------
             self.table_bootorder_refresh(True)
+            self.ui.lab_vmdiskname.setText(u'没有盘片')
             self.ui.cheakb_NAenabled.setChecked(True)
             self.ui.wg_NA.setEnabled(True)
             self.ui.cb_NAadaptertype.setCurrentIndex(0)
@@ -211,13 +225,13 @@ class setting(QMainWindow):
     def get_table_bootorder(self):
         bootorder_list=[]
         for i in range(0,4):
-            if self.ui.tab_bootorder.item(i,0)=='软驱':
+            if (self.ui.tab_bootorder.item(i,0).text())==u'软驱':
                 bootorder_list.append('1')
-            if self.ui.tab_bootorder.item(i,0)=='光驱':
+            if (self.ui.tab_bootorder.item(i,0).text())==u'光驱':
                 bootorder_list.append('2')
-            if self.ui.tab_bootorder.item(i,0)=='硬盘':
+            if (self.ui.tab_bootorder.item(i,0).text())==u'硬盘':
                 bootorder_list.append('3')
-            if self.ui.tab_bootorder.item(i,0)=='网络':
+            if (self.ui.tab_bootorder.item(i,0).text())==u'网络':
                 bootorder_list.append('4')
         return bootorder_list
 
@@ -268,7 +282,23 @@ class setting(QMainWindow):
     def openFileselectDialog(self):
         fileName = QFileDialog.getOpenFileName(self,self.tr('Open Image'),'c:',self.tr('ISO Files(*.ISO)'))
         print(fileName)
+        fileName=unicode(fileName)
         self.ISOpath=fileName
+
+    def ftp_upload(self):
+        ftp=FTP()
+        ftp.set_debuglevel(2)#打开调试级别2，显示详细信息;0为关闭调试信息
+        ftp.connect(self.host.IPAddr,'21')#连接
+        ftp.login('','')#登录，如果匿名登录则用空串代替即可
+        #print ftp.getwelcome()#显示ftp服务器欢迎信息
+        #ftp.cwd('xxx/xxx/') #选择操作目录
+        bufsize = 1024#设置缓冲块大小
+        file_handler = open(self.ISOpath,'rb')#以读模式在本地打开文件
+        ftp.storbinary('STOR %s' % os.path.basename(self.ISOpath),file_handler,bufsize)#上传文件
+        ftp.set_debuglevel(0)
+        file_handler.close()
+        ftp.quit()
+        print "ftp up OK"
 
     #确认按钮对应函数
     def confirm(self):
@@ -276,18 +306,110 @@ class setting(QMainWindow):
             #校验部分,非空检查
             if (self.ui.le_vmname.text()) =='':
                 QMessageBox.question(self, u'提示',u'请输入虚拟机名称')
-            if (self.ui.le_MACaddress.text()) =='':
+            elif (self.ui.le_MACaddress.text()) =='':
                 QMessageBox.question(self, u'提示',u'请输入MAC地址')
-            #逐个判断控件的值是否发生变化,如果有,这调用对应的值得提交修改函数
-            if (self.ui.cb_vmOS.currentText()) != self.vm.OSTypeId:
-                self.host.socket_processor.vb.set_guest_osversion(self.vm.Name,self.ui.cb_vmOS.currentText(),True)
-            if (self.ui.sb_cpucount.value()) != self.vm.CPUCount:
-                self.host.socket_processor.vb.set_guest_cpucount(self.vm.Name,self.ui.sb_cpucount.value(),True)
-            if (self.ui.sb_cpuexecutioncap.value()) != self.vm.CPUExecutionCap:
-                self.host.socket_processor.vb.get_guest_cpuexecutioncap(self.vm.Name,self.ui.sb_cpuexecutioncap.value(),True)
-            if (self.ui.sb_vmvmemsize.value()) != self.vm.CPUCount:
-                self.host.socket_processor.vb.set_guest_vramsize(self.vm.Name,self.ui.sb_vmvmemsize.value(),True)
-            if (self.ui.sb_vmmemsize.value()) != self.vm.CPUCount:
-                self.host.socket_processor.vb.set_guest_memsize(self.vm.Name,self.ui.sb_vmmemsize.value(),True)
-            if (self.ui.te.toPlainText()) != self.vm.Description:
-                self.host.socket_processor.vb.set_guest_description(self.vm.Name,self.ui.te.toPlainText(),True)
+            else:
+                    #逐个判断控件的值是否发生变化,如果有,这调用对应的值得提交修改函数
+                if str(self.ui.cb_vmOS.currentText()) != self.vm.OSTypeId:
+                    self.host.socket_processor.vb.set_guest_osversion(self.vm.Name,self.ui.cb_vmOS.currentText(),True)
+                if str(self.ui.sb_cpucount.value()) != self.vm.CPUCount:
+                    self.host.socket_processor.vb.set_guest_cpucount(self.vm.Name,self.ui.sb_cpucount.value(),True)
+                if str(self.ui.sb_cpuexecutioncap.value()) != self.vm.CPUExecutionCap:
+                    self.host.socket_processor.vb.set_guest_cpuexecutioncap(self.vm.Name,self.ui.sb_cpuexecutioncap.value(),True)
+                if str(self.ui.sb_vmvmemsize.value()) != self.vm.VRAMSize:
+                    self.host.socket_processor.vb.set_guest_vramsize(self.vm.Name,self.ui.sb_vmvmemsize.value(),True)
+                if str(self.ui.sb_vmmemsize.value()) != self.vm.MemorySize:
+                    self.host.socket_processor.vb.set_guest_memsize(self.vm.Name,self.ui.sb_vmmemsize.value(),True)
+                if str(self.ui.te.toPlainText()) != self.vm.Description:
+                    self.host.socket_processor.vb.set_guest_description(self.vm.Name,self.ui.te.toPlainText(),True)
+                if (self.get_table_bootorder()) != self.vm.BootOrder:
+                    bootorder=self.get_table_bootorder()
+                    self.host.socket_processor.vb.set_guest_bootorder(self.vm.Name,bootorder[0],bootorder[1],bootorder[2],bootorder[3],True)
+                if self.ISOpath is not None:
+                    self.host.socket_processor.vb.ftp_on()
+                    self.ftp_upload()
+                    self.host.socket_processor.vb.ftp_off()
+                    for ma in self.vm.MediumAttachment:
+                        if ma[4]=='2':
+                            self.host.socket_processor.vb.add_guest_mediums_dvd(self.vm.Name,ma[0],ma[2],os.path.basename(self.ISOpath),True)
+                if self.ui.cheakb_NAenabled.isChecked():
+                    adapterType=None
+                    if (self.ui.cb_NAadaptertype.currentText()) == 'I82540EM':
+                        adapterType='3'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'Virtio':
+                        adapterType='6'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'Am79C973':
+                        adapterType='2'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'I82543GC':
+                        adapterType='4'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'I82545EM':
+                        adapterType='5'
+                    if (self.ui.cb_NAbridgedinterface.currentText()) != (self.vm.NetworkAdapter[0])[4] or adapterType!=(self.vm.NetworkAdapter[0])[5] or (self.ui.le_MACaddress.text())!=(self.vm.NetworkAdapter[0])[2] or str(int(self.ui.cheakb_cableconnected.isChecked()))!=(self.vm.NetworkAdapter[0])[6]:
+                        self.host.socket_processor.vb.set_guest_networkadapters(self.vm.Name,'0','1',self.ui.le_MACaddress.text(),'2',self.ui.cb_NAbridgedinterface.currentText(),adapterType,str(int(self.ui.cheakb_cableconnected.isChecked())))
+                else:
+                    adapterType=None
+                    if (self.ui.cb_NAadaptertype.currentText()) == 'I82540EM':
+                        adapterType='3'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'Virtio':
+                        adapterType='6'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'Am79C973':
+                        adapterType='2'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'I82543GC':
+                        adapterType='4'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'I82545EM':
+                        adapterType='5'
+                    self.host.socket_processor.vb.set_guest_networkadapters(self.vm.Name,'0','0',self.ui.le_MACaddress.text(),'2',self.ui.cb_NAbridgedinterface.currentText(),adapterType,str(int(self.ui.cheakb_cableconnected)))
+                if(self.ui.le_vmname.text()) != self.vm.Name:
+                    self.host.socket_processor.vb.set_guest_name(self.vm.Name,self.ui.le_vmname.text(),True)
+                self.close()
+        #---------------------------------------进行虚拟机设定的校验提交结束-------------------------------------
+        else:
+        #进行新建虚拟机的校验提交
+        #校验部分,非空检查
+            if (self.ui.le_vmname.text()) =='':
+                QMessageBox.question(self, u'提示',u'请输入虚拟机名称')
+            elif (self.ui.le_MACaddress.text()) =='':
+                QMessageBox.question(self, u'提示',u'请输入MAC地址')
+            elif (self.ui.le_vdiname.text()) =='':
+                QMessageBox.question(self, u'提示',u'请输入虚拟磁盘名称')
+            else:
+                self.host.socket_processor.vb.create_new_machine(self.ui.le_vmname.text(),self.ui.te.toPlainText(),self.ui.cb_vmOS.currentText(),self.ui.sb_vmmemsize.value(),self.ui.sb_vmvmemsize.value(),self.ui.le_vdiname.text(),(self.ui.sb_vdisize.value())*1000*1000)
+                bootorder=self.get_table_bootorder()
+                print('bootorder:')
+                print(bootorder)
+                self.host.socket_processor.vb.set_guest_bootorder(self.ui.le_vmname.text(),bootorder[0],bootorder[1],bootorder[2],bootorder[3])
+                self.host.socket_processor.vb.set_guest_cpuexecutioncap(self.ui.le_vmname.text(),self.ui.sb_cpuexecutioncap.value())
+                if self.ISOpath is not None:
+                    self.host.socket_processor.vb.ftp_on()
+                    self.ftp_upload()
+                    self.host.socket_processor.vb.ftp_off()
+                    for ma in self.vm.MediumAttachment:
+                        if ma[4]=='2':
+                            self.host.socket_processor.vb.add_guest_mediums_dvd(self.vm.Name,ma[0],ma[2],os.path.basename(self.ISOpath),True)
+                if self.ui.cheakb_NAenabled.isChecked():
+                    adapterType=None
+                    if (self.ui.cb_NAadaptertype.currentText()) == 'I82540EM':
+                        adapterType='3'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'Virtio':
+                        adapterType='6'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'Am79C973':
+                        adapterType='2'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'I82543GC':
+                        adapterType='4'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'I82545EM':
+                        adapterType='5'
+                    if (self.ui.cb_NAbridgedinterface.currentText()) != (self.vm.NetworkAdapter[0])[4] or adapterType!=(self.vm.NetworkAdapter[0])[5] or (self.ui.le_MACaddress.text())!=(self.vm.NetworkAdapter[0])[2] or str(int(self.ui.cheakb_cableconnected))!=(self.vm.NetworkAdapter[0])[6]:
+                        self.host.socket_processor.vb.set_guest_networkadapters(self.vm.Name,'0','1',self.ui.le_MACaddress.text(),'2',self.ui.cb_NAbridgedinterface.currentText(),adapterType,str(int(self.ui.cheakb_cableconnected)))
+                else:
+                    adapterType=None
+                    if (self.ui.cb_NAadaptertype.currentText()) == 'I82540EM':
+                        adapterType='3'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'Virtio':
+                        adapterType='6'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'Am79C973':
+                        adapterType='2'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'I82543GC':
+                        adapterType='4'
+                    elif (self.ui.cb_NAadaptertype.currentText()) == 'I82545EM':
+                        adapterType='5'
+                    self.host.socket_processor.vb.set_guest_networkadapters(self.vm.Name,'0','0',self.ui.le_MACaddress.text(),'2',self.ui.cb_NAbridgedinterface.currentText(),adapterType,str(int(self.ui.cheakb_cableconnected)))
