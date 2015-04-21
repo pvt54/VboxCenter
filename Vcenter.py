@@ -60,7 +60,7 @@ class Vcenter(QMainWindow):
                         if ii.PowerState == '1':
                             child.setText(1,u'停止')
                         elif ii.PowerState == '5':
-                            child.setText((1,u'运行中'))
+                            child.setText(1,u'运行中')
         else:
             self.ui.widget_host.hide()
             self.ui.widget_vm.hide()
@@ -89,9 +89,9 @@ class Vcenter(QMainWindow):
                             self.ui.lab_vmpowerstate.setText(u'状态:运行中')
                             self.ui.btn_vmpowerstate.setText(u'停止')
                             self.ui.pgbar_vmcpuusage.setEnabled(True)
-                            self.ui.pgbar_vmcpuusage.setValue(int(float(vm.CPUUsage)))
+                            self.ui.pgbar_vmcpuusage.setValue(int(vm.CPUUsage))
                             self.ui.pgbar_vmmemusage.setEnabled(True)
-                            self.ui.pgbar_vmmemusage.setValue(int(float(vm.MemoryUsage)))
+                            self.ui.pgbar_vmmemusage.setValue(int(vm.MemoryUsage))
                         self.ui.lab_vmname.setText(str(unicode(vm.Name)))
                         self.ui.lab_vmcpucount.setText(str(vm.CPUCount))
                         self.ui.lab_cpuexecutioncap.setText(str(vm.CPUExecutionCap)+u'%')
@@ -175,7 +175,23 @@ class Vcenter(QMainWindow):
             return (item[0].text(0),item[0].text(1),(item[0].parent()).text(0))
 
     def vmpowerstate(self):
+        vmname,vmstate,hostname=self.tree_selected()
         if (self.ui.btn_vmpowerstate.text())== u'启动':
+           for host in self.Hostlist:
+               if host.Name==hostname:
+                   if host.isOnline == True:
+                       host.socket_processor.vb.machine_poweron(vmname)
+                       host.socket_processor.vb.get_guest_performance(vmname,True)
+                   else:
+                       QMessageBox.question(self, u'提示',u'服务端未连接.')
+
+        else:
+            for host in self.Hostlist:
+               if host.Name==hostname:
+                   if host.isOnline == True:
+                       host.socket_processor.vb.machine_poweroff(vmname,True)
+                   else:
+                       QMessageBox.question(self, u'提示',u'服务端未连接.')
 
 
 
@@ -279,7 +295,7 @@ class Vcenter(QMainWindow):
                         newvm.exec_()
         else:
             #打开一个虚拟机的设定窗口
-            if state==u'已连接':
+            if state==u'运行中':
                 QMessageBox.question(self, u'提示',u'虚拟机正在运行,无法设定.')
             else:
                 for host in self.Hostlist:

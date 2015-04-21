@@ -284,11 +284,12 @@ class setting(QMainWindow):
         print(fileName)
         fileName=unicode(fileName)
         self.ISOpath=fileName
+        self.ui.lab_vmdiskname.setText(os.path.basename(fileName))
 
     def ftp_upload(self):
         ftp=FTP()
         ftp.set_debuglevel(2)#打开调试级别2，显示详细信息;0为关闭调试信息
-        ftp.connect(self.host.IPAddr,'21')#连接
+        ftp.connect(str(self.host.IPAddr),'54221')#连接
         ftp.login('','')#登录，如果匿名登录则用空串代替即可
         #print ftp.getwelcome()#显示ftp服务器欢迎信息
         #ftp.cwd('xxx/xxx/') #选择操作目录
@@ -380,12 +381,19 @@ class setting(QMainWindow):
                 self.host.socket_processor.vb.set_guest_bootorder(self.ui.le_vmname.text(),bootorder[0],bootorder[1],bootorder[2],bootorder[3])
                 self.host.socket_processor.vb.set_guest_cpuexecutioncap(self.ui.le_vmname.text(),self.ui.sb_cpuexecutioncap.value())
                 if self.ISOpath is not None:
-                    self.host.socket_processor.vb.ftp_on()
-                    self.ftp_upload()
-                    self.host.socket_processor.vb.ftp_off()
-                    for ma in self.vm.MediumAttachment:
-                        if ma[4]=='2':
-                            self.host.socket_processor.vb.add_guest_mediums_dvd(self.vm.Name,ma[0],ma[2],os.path.basename(self.ISOpath),True)
+                    if self.host.FTPstate != True:
+                        self.host.socket_processor.vb.ftp_on()
+                    for i in range(0,5):
+                        if self.host.FTPstate == True:
+                            self.ftp_upload()
+                            for ma in self.vm.MediumAttachment:
+                                if ma[4]=='2':
+                                    self.host.socket_processor.vb.add_guest_mediums_dvd(self.vm.Name,ma[0],ma[2],os.path.basename(self.ISOpath),True)
+                            self.host.socket_processor.vb.ftp_off()
+                            break
+                        if i == 4:
+                             QMessageBox.question(self, u'提示',u'无法连接服务端的FTP服务')
+
                 if self.ui.cheakb_NAenabled.isChecked():
                     adapterType=None
                     if (self.ui.cb_NAadaptertype.currentText()) == 'I82540EM':

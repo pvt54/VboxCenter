@@ -40,7 +40,7 @@ class Command():
         self.host.socket_processor.append_command(command)
 
     def set_guest_cpucount(self,VMName,CPUCount,reflash=False):
-        command='set_guest_cpucount|'+VMName+'|'+str(CPUCount)+'|'+str(reflash)
+        command='SET_GUEST_CPUCOUNT|'+VMName+'|'+str(CPUCount)+'|'+str(reflash)
         self.host.socket_processor.append_command(command)
 
     def get_guest_cpuexecutioncap(self,VMName,reflash=False):
@@ -68,7 +68,7 @@ class Command():
         self.host.socket_processor.append_command(command)
 
     def get_guest_performance(self,VMName,reflash=False):
-        command='GET_GUEST_PERFORMANCE|'+VMName+str(reflash)
+        command='GET_GUEST_PERFORMANCE|'+VMName+'|'+str(reflash)
         self.host.socket_processor.append_command(command)
 
     def set_guest_name(self,VMName,NewVMName,reflash=False):
@@ -187,6 +187,7 @@ class Command():
                 self.get_guest_bootorder(vm.Name)
                 self.get_guest_storagectrls(vm.Name)
                 self.get_guest_networkadapters(vm.Name)
+                self.get_guest_performance(vm.Name)
                 self.get_guest_description(vm.Name,True)
         print('fillin complete')
 
@@ -460,18 +461,18 @@ class Command():
         if listset[0]=='success':
             for vm in self.host.VMList:
                 if vm.Name==listset[2]:
-                    if vm.Name==listset[2]:
-                        i=3
-                        while True:
-                            sc=[]
-                            for ii in range(0,4):
-                                sc.append(listset[i])
-                                i=i+1
-                            vm.StorageControllers.append(sc)
-                            self.get_guest_mediumattachmen(listset[2],sc[0])
-                            self.get_guest_mediums(listset[2],sc[0])
-                            if len(listset)==i+1:
-                                break
+                    vm.StorageControllers=[]
+                    i=3
+                    while True:
+                        sc=[]
+                        for ii in range(0,4):
+                            sc.append(listset[i])
+                            i=i+1
+                        vm.StorageControllers.append(sc)
+                        self.get_guest_mediumattachmen(listset[2],sc[0])
+                        self.get_guest_mediums(listset[2],sc[0])
+                        if len(listset)==i+1:
+                            break
 
 
             if listset[len(listset)-1]=='True':
@@ -491,6 +492,7 @@ class Command():
         if listset[0]=='success':
             for vm in self.host.VMList:
                 if vm.Name==listset[2]:
+                    # vm.MediumAttachment=[]
                     i=3
                     if len(listset)>4:
                         while True:
@@ -501,6 +503,8 @@ class Command():
                             vm.MediumAttachment.append(ma)
                             if len(listset)==(i+1):
                                 break
+                    print('vm.MediumAttachment')
+                    print(vm.MediumAttachment)
             if listset[len(listset)-1]=='True':
                 self.host.hostcallVcenter('','',1,1)
         else:
@@ -510,6 +514,7 @@ class Command():
         if listset[0]=='success':
             for vm in self.host.VMList:
                 if vm.Name==listset[2]:
+                    vm.Medium=[]
                     i=3
                     while True:
                         med=[]
@@ -544,8 +549,19 @@ class Command():
             self.host.reportfailure(listset)
 
     def reply_set_guest_networkadapters(self,listset):
-        self.reply_get_guest_networkadapters(listset)
-
+        if listset[0]=='success':
+            for vm in self.host.VMList:
+                if vm.Name==listset[2]:
+                    for na in vm.NetworkAdapter:
+                        if na[0]==listset[3]:
+                            i=3
+                            for ii in range(0,7):
+                                na[ii]=listset[i]
+                                i=i+1
+            if listset[len(listset)-1]=='True':
+                self.host.hostcallVcenter('','',1,1)
+        else:
+            self.host.reportfailure(listset)
 
     def reply_get_host_networkadapters(self,listset):
         if listset[0]=='success':
@@ -632,7 +648,7 @@ class Command():
         if listset[0]=='success':
             for vm in self.host.VMList:
                 if vm.Name==listset[2]:
-                    vm.PowerState=1
+                    vm.PowerState='5'
                     for i in range(3,len(listset)-1):
                         vm.PIDList.append(listset[i])
 
@@ -645,11 +661,19 @@ class Command():
         if listset[0]=='success':
             for vm in self.host.VMList:
                 if vm.Name==listset[2]:
-                    vm.PowerState=5
+                    vm.PowerState='1'
             if listset[len(listset)-1]=='True':
                 self.host.hostcallVcenter('','',1,1)
         else:
             self.host.reportfailure(listset)
+
+    def ftp_start(self,listset):
+        if listset[0]=='success':
+            self.host.FTPstate=True
+
+    def ftp_close(self,listset):
+        if listset[0]=='success':
+            self.host.FTPstate=False
 
 
 
@@ -695,6 +719,8 @@ class Command():
          'SET_GUEST_DESCRIPTION':reply_set_guest_description,
          'MACHINE_POWERON':reply_machine_poweron,
          'MACHINE_POWEROFF':reply_machine_poweroff,
+         'ftp_start':ftp_start,
+         'ftp_close':ftp_close,
         }
 
     def vbox_function(self,listset):

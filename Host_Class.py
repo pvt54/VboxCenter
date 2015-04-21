@@ -18,6 +18,9 @@ class HostInfo(QMainWindow):
         self.connect(self,SIGNAL('callVcenter(QString,QString,QString,QString)'),self.Vcenter.hostcallVcenter)
         self.connect(self,SIGNAL('reportfailure(QString)'),self.Vcenter.reportfailure)
 
+        #宿主机FTP状态
+        self.FTPstate=False
+
         #宿主机名称
         self.Name=None
 
