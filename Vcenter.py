@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 __author__ = '54'
-import sys,os,time
+import sys
 sys.path.append('forms')
 import threading
 from PyQt4.QtCore import *
@@ -11,6 +11,7 @@ from Host_Class import HostInfo
 from Vm_Class import VirtualMachineInfo
 from socket_processor import Socket_processor
 from newhost import Newhost
+from monitor import Monitor
 
 class Vcenter(QMainWindow):
     def __init__(self,parent=None):
@@ -29,10 +30,11 @@ class Vcenter(QMainWindow):
         # self.Hostlist[0].VMList[0].Name='test1'
         # self.Hostlist[0].VMList[0].PowerState=1
         #--------------
-        self.treeRefrash()
+        self.monitor=Monitor(self)
+        self.treeRefresh()
 
     #QTreeWidget数据刷新宿主机对象列表函数
-    def treeRefrash(self):
+    def treeRefresh(self):
         #清除现有数据
         ItemCount=self.ui.treeWidget.topLevelItemCount()
         if ItemCount>0:
@@ -64,20 +66,26 @@ class Vcenter(QMainWindow):
         else:
             self.ui.widget_host.hide()
             self.ui.widget_vm.hide()
+            self.monitor.flag=False
         if (self.ui.treeWidget.topLevelItemCount())>0:
             (self.ui.treeWidget.topLevelItem(0)).setSelected(True)
             print('setSelected')
             self.tree_selected()
+            self.monitor.start()
             #默认选中第一个host项目
 
     #刷新Widght_显示数据函数
     def widgetvmReflash(self,hostname,vmname):
         print('*-*-*-*-*-*-*-*-vm')
         print(vmname,hostname)
+        currentvm=None
+        currenthost=None
         for h in self.Hostlist:
             if h.Name==hostname:
+                currenthost=h
                 for vm in h.VMList:
                     if vm.Name==vmname:
+                        currentvm=vm
                         if vm.PowerState == '1':
                             self.ui.lab_vmpowerstate.setText(u'状态:停止')
                             self.ui.btn_vmpowerstate.setText(u'启动')
@@ -97,7 +105,7 @@ class Vcenter(QMainWindow):
                         self.ui.lab_cpuexecutioncap.setText(str(vm.CPUExecutionCap)+u'%')
                         self.ui.lab_vmmemsize.setText(str(vm.MemorySize)+'MB')
                         self.ui.lab_vmosversion.setText(str(vm.OSTypeId))
-                        self.ui.tb_vmdescription.append(unicode(vm.Description))
+                        self.ui.tb_vmdescription.setText(unicode(str(vm.Description)))
                         self.ui.lab_vmvmemsize.setText(str(vm.VRAMSize)+'MB')
                         self.ui.lab_vmSCname.setText(str((vm.StorageControllers[0])[0]))
                         if (vm.StorageControllers[0])[1] == '2':
@@ -123,18 +131,25 @@ class Vcenter(QMainWindow):
                             self.ui.lab_vmdisksize.setText('0 MB')
                             self.ui.lab_vmdvdname.setText(u'没有碟片')
                         self.ui.lab_vmNA1name.setText(str((vm.NetworkAdapter[0])[4]))
+                        break
+                break
+        self.monitor.host = currenthost
+        self.monitor.vm = currentvm
+
 
     #刷新Widght_host显示数据函数
     def widgethostReflash(self,hostname,hoststate):
         print('*-*-*-*-*-*-*-*-*-*-host')
         print(hostname,hoststate)
+        currenthost=None
         for h in self.Hostlist:
             if h.Name==hostname:
+                currenthost=h
                 if h.isOnline:
                     self.ui.pgbar_cpuusage.setEnabled(True)
                     self.ui.pgbar_cpuusage.setValue(int(float(h.CPUUsage)))
                     self.ui.pgbar_memusage.setEnabled(True)
-                    self.ui.pgbar_memusage.setValue(int(float(h.MemoryAvailable)/float(h.MemorySize)*100))
+                    self.ui.pgbar_memusage.setValue(100-int(float(h.MemoryAvailable)/float(h.MemorySize)*100))
                     self.ui.pgbar_diskusage.setEnabled(True)
                     self.ui.pgbar_diskusage.setValue(int(float(h.DiskUsage)))
                 else:
@@ -149,30 +164,33 @@ class Vcenter(QMainWindow):
                 self.ui.lab_hostver.setText(u'操作系统 : '+str(h.OSTypeId))
                 self.ui.lab_cpucount.setText(str(h.CoreCount)+u'核心'+str(h.CPUCount)+u'线程')
                 self.ui.lab_cpuinfo.setText(str(h.CPUInfo))
-                self.ui.lab_memsize.setText(str(h.MemorySize))
+                self.ui.lab_memsize.setText(str(h.MemorySize)+'MB')
                 if float(h.VboxTotalSize) >(1024*1024):  #文件夹大小过GB
                     self.ui.lab_totalsize.setText(str(int(float(h.VboxTotalSize)/1024.0/1024.0))+u'GB')
                 elif float(h.VboxTotalSize) >1024:  #文件夹大小过MB
                     self.ui.lab_totalsize.setText(str(int(float(h.VboxTotalSize)/1024.0))+u'MB')
                 else:  #文件夹大小只过KB
                     self.ui.lab_totalsize.setText(str(int(h.VboxTotalSize))+u'KB')
+                break
+        self.monitor.host = currenthost
 
 
 
     #QTreeWidget的项目选中后操作
-    def tree_selected(self):
+    def tree_selected(self,refresh=True):
         item=self.ui.treeWidget.selectedItems()
         print(item[0].text(0)+' is selected !')
-        if item[0].parent() is None:
-            self.widgethostReflash(item[0].text(0),item[0].text(1))
-            self.ui.widget_host.show()
-            self.ui.widget_vm.hide()
-            return (item[0].text(0),item[0].text(1),True)
-        else:
-            self.widgetvmReflash((item[0].parent()).text(0),item[0].text(0))
-            self.ui.widget_vm.show()
-            self.ui.widget_host.hide()
-            return (item[0].text(0),item[0].text(1),(item[0].parent()).text(0))
+        if refresh:
+            if item[0].parent() is None:
+                self.widgethostReflash(item[0].text(0),item[0].text(1))
+                self.ui.widget_host.show()
+                self.ui.widget_vm.hide()
+                return (item[0].text(0),item[0].text(1),True)
+            else:
+                self.widgetvmReflash((item[0].parent()).text(0),item[0].text(0))
+                self.ui.widget_vm.show()
+                self.ui.widget_host.hide()
+                return (item[0].text(0),item[0].text(1),(item[0].parent()).text(0))
 
     def vmpowerstate(self):
         vmname,vmstate,hostname=self.tree_selected()
@@ -219,7 +237,7 @@ class Vcenter(QMainWindow):
             self.connect(del_action,SIGNAL('triggered()'),self.delete_host)
             popMenu.addAction(del_action)
         else:#如果右键的项目为一个Vm
-            if item_name==u'停止':#判断虚拟机状态(通电/断电)
+            if item_state==u'停止':#判断虚拟机状态(通电/断电)
                 poweron_action=QAction(u'启动', self)
                 self.connect(poweron_action,SIGNAL('triggered()'),self.fun1)
                 popMenu.addAction(poweron_action)
@@ -277,7 +295,7 @@ class Vcenter(QMainWindow):
                 self.Hostlist[i].socket_processor.disconn()
                 del self.Hostlist[i]
 
-        self.treeRefrash()
+        self.treeRefresh()
 
     #新建虚拟机/设定虚拟机
     def vmsetting(self):
@@ -330,7 +348,7 @@ class Vcenter(QMainWindow):
                 else:
                     pass
         if reflashtree==u'\x01':
-            self.treeRefrash()
+            self.treeRefresh()
         if reflash==u'\x01':
             self.tree_selected()
 

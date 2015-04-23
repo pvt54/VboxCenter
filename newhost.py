@@ -12,7 +12,7 @@ from Host_Class import HostInfo
 
 class Newhost(QMainWindow):
      def __init__(self,Vcenter):
-        QWidget.__init__(self,parent=None)
+        QWidget.__init__(self,parent=Vcenter)
         self.ui=Ui_newhost()
         self.ui.setupUi(self)
         #新宿主机IP地址和密码

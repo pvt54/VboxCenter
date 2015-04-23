@@ -57,33 +57,6 @@
      <string>服务端列表</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>240</y>
-      <width>421</width>
-      <height>111</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Calibri</family>
-      <pointsize>16</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="text">
-     <string>尚未添加VirtualBox服务端</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
    <widget class="QWidget" name="widget_host" native="true">
     <property name="geometry">
      <rect>
@@ -723,9 +696,9 @@
      <widget class="QLabel" name="lab_vmSCname">
       <property name="geometry">
        <rect>
-        <x>420</x>
+        <x>400</x>
         <y>290</y>
-        <width>61</width>
+        <width>81</width>
         <height>21</height>
        </rect>
       </property>
@@ -742,7 +715,7 @@
      <widget class="QLabel" name="lab_vmSCtype">
       <property name="geometry">
        <rect>
-        <x>480</x>
+        <x>560</x>
         <y>290</y>
         <width>61</width>
         <height>21</height>
@@ -761,9 +734,9 @@
      <widget class="QLabel" name="lab_vmdiskname">
       <property name="geometry">
        <rect>
-        <x>420</x>
+        <x>400</x>
         <y>320</y>
-        <width>61</width>
+        <width>151</width>
         <height>21</height>
        </rect>
       </property>
@@ -780,7 +753,7 @@
      <widget class="QLabel" name="lab_disksize">
       <property name="geometry">
        <rect>
-        <x>480</x>
+        <x>560</x>
         <y>320</y>
         <width>91</width>
         <height>21</height>
@@ -917,12 +890,38 @@
        <number>24</number>
       </property>
      </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>90</y>
+        <width>421</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>16</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>尚未添加VirtualBox服务端</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
     </widget>
    </widget>
    <zorder>widget_host</zorder>
    <zorder>treeView</zorder>
    <zorder>label</zorder>
-   <zorder>label_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

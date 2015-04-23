@@ -124,21 +124,18 @@ class setting(QMainWindow):
             #---------------------------加入bootordertable初始化代码--------------------------
             self.table_bootorder_refresh()
             self.ui.lab_vmdiskname.setText(u'没有盘片')
+            self.ui.le_vdiname.setText(u'')
+            self.ui.le_vdiname.setEnabled(False)
+            self.ui.sb_vdisize.setValue(0)
+            self.ui.sb_vdisize.setEnabled(False)
             for med in vm.Medium:
                 if med[2]=='2':
                     self.ui.lab_vmdiskname.setText(med[0])
-                else:
-                    self.ui.lab_vmdiskname.setText(u'没有盘片')
-                if med[2]=='3':
+                elif med[2]=='3':
                     self.ui.le_vdiname.setText(med[0])
-                    self.ui.le_vdiname.setEnabled(False)
                     self.ui.sb_vdisize.setValue(int(float(med[4])/1000/1000))
-                    self.ui.sb_vdisize.setEnabled(False)
-                else:
-                    self.ui.le_vdiname.setText(u'')
-                    self.ui.le_vdiname.setEnabled(False)
-                    self.ui.sb_vdisize.setValue(0)
-                    self.ui.sb_vdisize.setEnabled(False)
+
+
             if (vm.NetworkAdapter[0])[1]=='1':
                 self.ui.cheakb_NAenabled.setChecked(True)
                 self.ui.wg_NA.setEnabled(True)
